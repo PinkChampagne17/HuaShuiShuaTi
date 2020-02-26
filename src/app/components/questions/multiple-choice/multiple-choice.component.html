@@ -1,0 +1,10 @@
+<button mat-raised-button
+    *ngFor="let option of optionsViewModel"
+    (mousemove)="mousemove(option.id)"
+    (mouseout)="mouseout()"
+    (click)="click(option.id)"
+    [color]="color(option.id)">
+    <span style="white-space: normal;">
+        {{ option.text }}
+    </span>
+</button>

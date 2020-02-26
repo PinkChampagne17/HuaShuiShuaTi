@@ -1,0 +1,27 @@
+<label id="example-radio-group-label">题目类型:</label>
+<br>
+<mat-radio-group
+    aria-labelledby="example-radio-group-label"
+    class="example-radio-group"
+    [(ngModel)]="questionViewModel.type">
+
+  <mat-radio-button
+    class="example-radio-button"
+    *ngFor="let type of types"  
+    [value]="type.value">
+    {{ type.name }}
+  </mat-radio-button>
+</mat-radio-group>
+
+<mat-form-field class="example-full-width">
+    <mat-label>题目</mat-label>
+    <textarea matInput [(ngModel)]="questionViewModel.title" placeholder=""></textarea>
+</mat-form-field>
+
+<div [ngSwitch]="questionViewModel.type">
+
+    <app-edit-multiple-choice *ngSwitchCase="0" [questionViewModel]="questionViewModel"></app-edit-multiple-choice>
+    <app-edit-multiple-answer *ngSwitchCase="1" [questionViewModel]="questionViewModel"></app-edit-multiple-answer>
+    <app-edit-true-or-false *ngSwitchCase="2" [questionViewModel]="questionViewModel"></app-edit-true-or-false>
+    <app-edit-fill-in-the-blank *ngSwitchCase="3" [questionViewModel]="questionViewModel"></app-edit-fill-in-the-blank>
+</div>

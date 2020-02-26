@@ -1,0 +1,20 @@
+<div class="content" style="max-width: 320px;">
+    <mat-form-field class="example-full-width">
+        <input matInput type="text" aria-label="Assignee" [formControl]="myControl"
+            [matAutocomplete]="auto" [placeholder]="placeholder" [(ngModel)]="input">
+        <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
+            <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+                {{option.name}}
+            </mat-option>
+        </mat-autocomplete>
+    </mat-form-field>
+
+    <mat-form-field>
+        <input matInput [matDatepicker]="picker" placeholder="你的生日 (非必填)" [(ngModel)]="date">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <br/>
+    <button mat-raised-button color="primary" (click)="save()">保存</button>
+</div>

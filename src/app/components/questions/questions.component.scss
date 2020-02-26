@@ -1,0 +1,32 @@
+.toolbarButton{
+    border-radius:4px;
+    width: 90px;
+    padding: 4px;
+    text-align: center;
+    font-size: 15px;
+    cursor: pointer;
+}
+
+.toolbarButton:hover{
+    background-color: #3949a0;
+    transition: 0.5s;
+}
+
+.recentMessage{
+    text-align: center;
+    font-size: 15px;
+    right: 30px;
+    position: absolute;
+}
+
+.mat-orange{
+    background-color: #FF9800;
+    color: #fff;
+}
+
+button{
+    display: block;
+    margin: 0 auto;
+    width: 40%;
+    padding: 8px;
+}

@@ -1,0 +1,14 @@
+选项数量：{{ number }}个选项
+<br>
+<mat-slider thumbLabel class=".edit-question-mat-slider"
+    [(ngModel)]="number" tickInterval="1" min="2" max="8"
+    ></mat-slider>
+<br>
+<div *ngFor="let option of questionViewModel.options; let key = index;">
+    <mat-checkbox [(ngModel)]="option.isRight">
+        <mat-form-field class="example-full-width">
+            <mat-label>选项{{ key + 1 }}</mat-label>
+            <input matInput [(ngModel)]="option.text" placeholder="" value="">
+        </mat-form-field>
+    </mat-checkbox>
+</div>

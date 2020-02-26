@@ -1,0 +1,38 @@
+<app-toolbar></app-toolbar>
+<app-progress-bar></app-progress-bar>
+
+<mat-tab-group mat-align-tabs="center">
+    <mat-tab label="主页">
+        <div class="content">
+            <mat-card *ngFor="let lib of libraries">
+                <p>{{ lib.name }}</p>
+                <p>创建人：{{ lib.creater }}</p>
+                <p>创建时间：{{ lib.date | date:"yyyy-MM-dd HH:mm:ss" }}</p>
+                <button mat-raised-button color="primary" routerLink="/questions/{{ lib.id }}">开始</button>
+                <button mat-raised-button color="primary" routerLink="/editlibrary/{{ lib.id }}">编辑题库</button>
+                <button mat-raised-button color="accent" (click)="removeLibrary(lib.id)">删除</button>
+            </mat-card>
+
+            <mat-card>
+                <mat-form-field class="example-full-width">
+                    <mat-label>添加新题库</mat-label>
+                    <input matInput placeholder="题库名" [(ngModel)]="newLibraryName">
+                </mat-form-field>
+                <br>
+                <button mat-raised-button color="primary" (click)="addLibrary()">添加</button>
+                <button mat-raised-button color="primary" (click)="importButtonClick()">通过文件导入题库</button>
+                <input #fileInput style="display: none;" type="file" accept=".json" (change)="import($event)">
+            </mat-card>
+        </div>
+    </mat-tab>
+
+    <mat-tab label="我">
+        <app-edit-user-info></app-edit-user-info>
+    </mat-tab>
+
+    <mat-tab label="关于">
+        <p style="text-align: center;">&copy; 2020 GitHub@PinkChampagne17</p>
+    </mat-tab>
+    
+</mat-tab-group>
+  

@@ -1,0 +1,63 @@
+<app-toolbar id="edit-library-header"></app-toolbar>
+<app-progress-bar></app-progress-bar>
+
+<div id="edit-library-component-content" class="content">
+
+    <button mat-raised-button color="primary"
+        routerLink="/">返回主页</button>
+
+    <button mat-raised-button color="primary"
+        (click)="scrollIntoView('edit-library-component-content', false)">跳至底部</button>
+
+    <button mat-raised-button color="primary"
+        (click)="export()">导出题库</button>
+        
+    <a #exportElement style="display: none;"></a>
+    <br>
+
+    <mat-form-field class="example-full-width">
+        <mat-label>题库名（返回主页后保存）</mat-label>
+        <input matInput placeholder="" [(ngModel)]="libraryName">
+    </mat-form-field>
+    
+    <mat-card style="margin-bottom: 15px;">
+        <p>创建者：{{ libraryInfo.creater }}</p>
+        <p>题目数量：{{ questions.length }}</p>
+    </mat-card>
+    
+    <mat-accordion>
+        <mat-expansion-panel
+            *ngFor="let question of questions"
+            [id]="question.id" (opened)="scrollIntoView(question.id.toString(), true, 200)">
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    {{ subTitle(question.title) }}
+                </mat-panel-title>
+                <mat-panel-description>
+                    {{ toTypeName(question.type) }}
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+            <app-edit-question [questionViewModel]="question"></app-edit-question>
+            <button mat-raised-button color="primary" (click)="saveQuestion(question.id)">保存</button>
+            <button mat-raised-button color="accent" (click)="removeQuestion(question.id)">删除</button>
+        </mat-expansion-panel>
+        
+        <mat-expansion-panel
+            id="edit-library-component-add"
+            (opened)="scrollIntoView('edit-library-component-add', true, 200)">
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    添加新题目
+                </mat-panel-title>
+                <mat-panel-description>
+                    
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+            <app-edit-question [questionViewModel]="newQuestionViewModel"></app-edit-question>
+            <button mat-raised-button color="primary" (click)="addQuestion()">添加</button>
+        </mat-expansion-panel>
+    </mat-accordion>
+    <button mat-raised-button color="primary"
+        style="margin-top: 15px;"
+        (click)="scrollIntoView('edit-library-header')">回到顶部</button>
+</div>

@@ -1,0 +1,32 @@
+/* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; scroll-behavior: smooth; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.horizontal-center {
+    margin: 0 auto;
+}
+
+.content {
+    margin: 0 auto;
+    max-width: 650px;   
+    padding: 10px;
+}
+
+.edit-question-mat-slider {
+    width: 50%;
+}
+
+@media screen and (max-width: 1024px) {
+    .content {
+        max-width: 100%;
+        padding: 10px;
+    }
+
+    .edit-question-mat-slider {
+        width: 90%;
+    }
+}
+
+// 隐藏滚动条
+// ::-webkit-scrollbar{ display: none; }

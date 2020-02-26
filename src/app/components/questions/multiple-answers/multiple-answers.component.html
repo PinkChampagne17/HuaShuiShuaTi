@@ -1,0 +1,10 @@
+<section class="example-section">
+    <mat-checkbox class="example-margin" style="display: block;"
+        *ngFor="let option of options; let key = index;"
+        [disabled]="detail.isAnswered"
+        [(ngModel)]="input[key]">
+        <span [ngStyle]="{'color': color(option.isRight)}" style="white-space: normal;">
+            {{ option.text }}
+        </span>
+    </mat-checkbox>
+</section>

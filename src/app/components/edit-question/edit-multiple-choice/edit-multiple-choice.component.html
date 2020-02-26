@@ -1,0 +1,24 @@
+选项数量：{{ number }}个选项
+<br>
+<mat-slider thumbLabel [(ngModel)]="number" class=".edit-question-mat-slider"
+    tickInterval="1"
+    min="2" max="8"></mat-slider>
+<mat-radio-group
+    aria-labelledby="example-radio-group-label"
+    class="example-radio-group"
+    [(ngModel)]="rightOption">
+
+    <div *ngFor="let option of questionViewModel.options; let key = index;">
+        <mat-radio-button
+            class="example-radio-button"
+            [value]="key">
+
+            <mat-form-field class="example-full-width">
+                <mat-label>选项{{ key + 1 }}</mat-label>
+                <input matInput [(ngModel)]="option.text" placeholder="" value="" >
+            </mat-form-field>
+
+        </mat-radio-button>
+    </div>
+
+</mat-radio-group>

@@ -1,0 +1,8 @@
+<mat-form-field class="example-full-width">
+    <mat-label>你的答案</mat-label>
+    <input matInput placeholder="" [(ngModel)]="input">
+    <button mat-button matSuffix mat-icon-button aria-label="Clear"
+        *ngIf="input" (click)="input=''">
+        <mat-icon>close</mat-icon>
+    </button>
+</mat-form-field>

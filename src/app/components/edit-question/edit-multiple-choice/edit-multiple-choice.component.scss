@@ -1,0 +1,17 @@
+.example-radio-group {
+    // display: flex;
+    flex-direction: column;
+    margin: 15px 0;
+}
+
+.mat-radio-button ~ .mat-radio-button {
+    margin-left: 16px;
+}
+
+mat-slider {
+    width: 300px;
+}
+
+.example-full-width {
+    width: 100%;
+}
