@@ -136,6 +136,7 @@ export class EditLibraryComponent {
       'data:text/plain;charset=utf-8,' + encodeURIComponent(this.questionService.export(this.libraryInfo)));
     element.setAttribute('download', `${this.libraryInfo.name}_${this.libraryInfo.creater}.json`);
     element.click();
+    this.toastService.show("题库文件已添加至下载列表中", ToastBackgroundColor.success, 5000);
   }
 
   scrollIntoView(elementId: string, isTopAlign = true, timeout = 0) {
