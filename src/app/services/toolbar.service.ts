@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { UserInfoLocalStorageService } from './user-info-local-storage.service';
-import { IUserInfoService } from '../Library/user-info-service';
 
 @Injectable({
   providedIn: 'root'

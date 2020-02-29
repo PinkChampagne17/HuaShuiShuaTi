@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 import { UserInfoLocalStorageService } from 'src/app/services/user-info-local-storage.service';
 import { ToastService, ToastBackgroundColor } from 'src/app/services/toast.service';
 import { ToolbarService } from 'src/app/services/toolbar.service';
+import { UserInfo } from 'src/app/Library/user-info-service';
 
 export interface User {
   name: string;
@@ -45,18 +46,30 @@ export class EditUserInfoComponent {
         throw "string is empty";
       }
 
-      if(this.userInfoService.setUserInfo( { name: name, date: this.date } )) {
-        let user = this.options.find(opiton => opiton.name == name);
-        let message = user == null ? "保存成功" : user.stinger;
-        this.toastService.show(message, ToastBackgroundColor.success);
-        this.toolbarService.greet();
-      }
-      else {
-        this.toastService.show("保存失败", ToastBackgroundColor.danger, 5000);
-      }
+      this.saveUserInfo({ name: name, date: this.date });
     }
     catch (error) {
-      this.toastService.show("不接受空名字", ToastBackgroundColor.danger, 5000);
+      let userInfo = this.userInfoService.getUserInfo();
+
+      if(userInfo != null && this.date != null) {
+        this.saveUserInfo({ name: userInfo.name, date: this.date });
+      }
+      else {
+        this.toastService.show("不接受空名字", ToastBackgroundColor.danger, 5000);
+      }
+    }
+  }
+
+  private saveUserInfo(userInfo: UserInfo): void {
+    if(this.userInfoService.setUserInfo(userInfo)) {
+      let option = this.options.find(opiton => opiton.name == name);
+      let message =  option == null ? "保存成功" : option.stinger;
+
+      this.toastService.show(message, ToastBackgroundColor.success);
+      this.toolbarService.greet();
+    }
+    else {
+      this.toastService.show("保存失败", ToastBackgroundColor.danger, 5000);
     }
   }
   

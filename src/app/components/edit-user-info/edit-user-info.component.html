@@ -4,7 +4,7 @@
             [matAutocomplete]="auto" [placeholder]="placeholder" [(ngModel)]="input">
         <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
             <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
-                {{option.name}}
+                {{option.name || async}}
             </mat-option>
         </mat-autocomplete>
     </mat-form-field>

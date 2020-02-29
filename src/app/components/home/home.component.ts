@@ -21,8 +21,6 @@ export class HomeComponent {
   @ViewChild("fileInput", { static: true })
   private fileInputElement: ElementRef;
 
-  private userInfo: UserInfo;
-
   constructor(
     private toastService: ToastService,
     private dialogService: DialogService,
@@ -30,7 +28,6 @@ export class HomeComponent {
     private questionService: QuestionsLocalStorageService,
     private userInfoService: UserInfoLocalStorageService) {
 
-    this.userInfo = this.userInfoService.getUserInfo();
     this.toolbarService.greet();
     this.updateLibraries();
   }
@@ -40,15 +37,16 @@ export class HomeComponent {
   }
 
   addLibrary() {
+    let userInfo = this.userInfoService.getUserInfo();
     if(this.newLibraryName.trim() == ""){
       this.toastService.show("题库名不能为空", ToastBackgroundColor.danger, 5000);
       return;
     }
-    else if(this.userInfo == null) {
+    else if(userInfo == null) {
       this.toastService.show("创建题库前，请先设置用户名", ToastBackgroundColor.danger, 5000);
       return;
     }
-    this.questionService.addLibrary(this.newLibraryName, this.userInfo.name);
+    this.questionService.addLibrary(this.newLibraryName, userInfo.name);
     this.toastService.show("添加成功", ToastBackgroundColor.success);
     this.newLibraryName = "";
     this.updateLibraries();
