@@ -4,8 +4,8 @@
   "theme_color": "#283593",
   "background_color": "#fafafa",
   "display": "standalone",
-  "scope": "/HuaShuiShuaTi/",
-  "start_url": "/HuaShuiShuaTi/",
+  "scope": "/huashuishuati/",
+  "start_url": "/huashuishuati/",
   "icons": [
     {
       "src": "assets/icons/icon-72x72.png",

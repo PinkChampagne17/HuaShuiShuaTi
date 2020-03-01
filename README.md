@@ -9,7 +9,7 @@
 
 | Description | URL |
 | :-: |:-:|
-| Online Web-version | https://pinkchampagne17.github.io/HuaShuiShuaTi/
+| Online Web-version | https://pinkchampagne17.github.io/huashuishuati/ 
 
 ## 如何在本地运行？
 
