@@ -16,13 +16,22 @@
             <mat-card>
                 <mat-form-field class="example-full-width">
                     <mat-label>添加新题库</mat-label>
-                    <input matInput placeholder="题库名" [(ngModel)]="newLibraryName">
+                    <input matInput placeholder="题库名" [(ngModel)]="newLibraryName" (keyup.enter)="addLibrary()">
                 </mat-form-field>
                 <br>
                 <button mat-raised-button color="primary" (click)="addLibrary()">添加</button>
                 <button mat-raised-button color="primary" (click)="importButtonClick()">通过文件导入题库</button>
                 <input #fileInput style="display: none;" type="file" accept=".json" (change)="import($event)">
             </mat-card>
+            
+            <div style="color: rgb(122, 122, 122); font-size: smaller;">
+                <span class="horizontal-center" style="display: table;">Version: 20.03.01.0</span>
+                <p style="text-indent: 2em;">
+                    推荐使用Microsoft Edge(Chromium)或Google chrome浏览器使用本应用。
+                    PC端点击地址栏右侧的“+”图标可将本应用添加到桌面上，
+                    移动端可通过浏览器菜单将本应用添加至桌面上。
+                </p>
+            </div>
         </div>
     </mat-tab>
 

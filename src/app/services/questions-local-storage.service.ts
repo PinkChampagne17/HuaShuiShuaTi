@@ -4,7 +4,7 @@ import { QuestionOption, IQuestionsService, QuestionType, LibraryInfo, Question 
 
 interface LsQuestionLibraryData {
   libraryInfo: LibraryInfo;
-  question: string;
+  questions: string;
 }
 
 class LsQuestions{
@@ -118,7 +118,7 @@ export class QuestionsLocalStorageService implements IQuestionsService{
   export(libraryInfo: LibraryInfo): string {
     let data: LsQuestionLibraryData = {
       libraryInfo: libraryInfo,
-      question: localStorage.getItem(libraryInfo.id)
+      questions: localStorage.getItem(libraryInfo.id)
     }
     return JSON.stringify(data);
   }
@@ -135,7 +135,7 @@ export class QuestionsLocalStorageService implements IQuestionsService{
           libraries.push(data.libraryInfo);
         }
       });
-      localStorage.setItem(data.libraryInfo.id, data.question);
+      localStorage.setItem(data.libraryInfo.id, data.questions);
     } 
     catch (error) {
       return false;

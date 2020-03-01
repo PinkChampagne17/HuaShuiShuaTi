@@ -1,10 +1,11 @@
 <div class="content" style="max-width: 320px;">
     <mat-form-field class="example-full-width">
         <input matInput type="text" aria-label="Assignee" [formControl]="myControl"
-            [matAutocomplete]="auto" [placeholder]="placeholder" [(ngModel)]="input">
+            [matAutocomplete]="auto" [placeholder]="placeholder" [(ngModel)]="input"
+            (keyup.enter)="save()">
         <mat-autocomplete #auto="matAutocomplete" [displayWith]="displayFn">
             <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
-                {{option.name || async}}
+                {{ option.name }}
             </mat-option>
         </mat-autocomplete>
     </mat-form-field>

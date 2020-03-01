@@ -6,7 +6,6 @@ import { ToastService, ToastBackgroundColor } from 'src/app/services/toast.servi
 import { DialogService, DialogData } from 'src/app/services/dialog.service';
 import { ToolbarService } from 'src/app/services/toolbar.service';
 import { LibraryInfo } from 'src/app/Library/question-service';
-import { UserInfo } from 'src/app/Library/user-info-service';
 
 @Component({
   selector: 'app-home',
@@ -25,8 +24,8 @@ export class HomeComponent {
     private toastService: ToastService,
     private dialogService: DialogService,
     private toolbarService: ToolbarService,
-    private questionService: QuestionsLocalStorageService,
-    private userInfoService: UserInfoLocalStorageService) {
+    private userInfoService: UserInfoLocalStorageService,
+    private questionService: QuestionsLocalStorageService) {
 
     this.toolbarService.greet();
     this.updateLibraries();
@@ -38,6 +37,7 @@ export class HomeComponent {
 
   addLibrary() {
     let userInfo = this.userInfoService.getUserInfo();
+
     if(this.newLibraryName.trim() == ""){
       this.toastService.show("题库名不能为空", ToastBackgroundColor.danger, 5000);
       return;
@@ -46,6 +46,7 @@ export class HomeComponent {
       this.toastService.show("创建题库前，请先设置用户名", ToastBackgroundColor.danger, 5000);
       return;
     }
+    
     this.questionService.addLibrary(this.newLibraryName, userInfo.name);
     this.toastService.show("添加成功", ToastBackgroundColor.success);
     this.newLibraryName = "";

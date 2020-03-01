@@ -1,7 +1,7 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { QuestionType, IQuestionsService, Question, LibraryInfo } from 'src/app/Library/question-service';
+import { IQuestionsService, Question, LibraryInfo } from 'src/app/Library/question-service';
 import { QuestionsLocalStorageService } from 'src/app/services/questions-local-storage.service';
 import { ProgressBarService } from 'src/app/services/progress-bar.service';
 
@@ -24,16 +24,9 @@ export class QuestionsComponent {
   @ViewChild("questionsContent", { static: true })
   public questionsContentElement: ElementRef;
 
-  public contentSwitch: boolean = true;
+  public contentSwitch: boolean;
   public questions: Array<Question>;
-  public detail: AnswerDetail = {
-    index: 0,
-    rigthAnswers: 0,
-    isAnswered: false,
-    isRight: false,
-    isSkipped: false,
-    isComplete: false
-  }
+  public detail: AnswerDetail;
 
   private questionsService: IQuestionsService;
   private libraryInfo: LibraryInfo;
@@ -49,9 +42,7 @@ export class QuestionsComponent {
       this.libraryInfo = this.questionsService.getAllLibraries().find(lib => lib.id == id);
       this.questions = this.questionsService.getAllQuestions(this.libraryInfo);
 
-      if(this.questions.length == 0) {
-        this.detail.isComplete = true;
-      }
+      this.reset();
   }
 
   nextQuestion(): void {
@@ -74,6 +65,24 @@ export class QuestionsComponent {
     setTimeout(() => {
       this.contentSwitch = true;
     }, 1);
+  }
+
+  reset() {
+    this.detail = {
+      index: 0,
+      rigthAnswers: 0,
+      isAnswered: false,
+      isRight: false,
+      isSkipped: false,
+      isComplete: false
+    }
+
+    if(this.questions.length == 0) {
+      this.detail.isComplete = true;
+    }
+
+    this.contentSwitch = true;
+    this.progressBarService.setValue(0);
   }
 
   ngOnDestroy(): void {

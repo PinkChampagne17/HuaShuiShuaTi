@@ -1,8 +1,10 @@
 <mat-toolbar color="primary">
     <mat-toolbar-row>
-        <span class="toolbarButton" routerLink="/">返回主页</span>
-        <span class="recentMessage" *ngIf="!detail.isComplete"
-            >第{{ detail.index + 1 }}/{{ questions.length }}题</span>
+        <div *ngIf="!detail.isComplete">
+            <span class="toolbarButton" routerLink="/">返回主页</span>
+            <span class="recentMessage"
+                >第{{ detail.index + 1 }}/{{ questions.length }}题</span>
+        </div>
     </mat-toolbar-row>
 </mat-toolbar>
 
@@ -72,10 +74,7 @@
 
                 </ng-template>
             </div>
-            
-           
         </div>
-
     </ng-container>
 
     <ng-template #completeView>
@@ -89,7 +88,10 @@
                     <p>正确率：{{ this.detail.rigthAnswers / questions.length * 100 }}%</p>
                 <!-- </mat-card-content> -->
             </mat-card>
+            <br>
+            <button mat-raised-button color="primary" (click)="reset()">再来一遍</button>
+            <br>
+            <button mat-raised-button color="primary" routerLink="/">返回主页</button>
         </div>
-
     </ng-template>
 </div>
