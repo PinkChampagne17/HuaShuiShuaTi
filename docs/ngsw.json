@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1583053541244,
+  "timestamp": 1583232429702,
   "index": "/index.html",
   "assetGroups": [
     {
@@ -10,8 +10,8 @@
       "urls": [
         "/favicon.ico",
         "/index.html",
-        "/main-es2015.505d56f0f362c97782cb.js",
-        "/main-es5.505d56f0f362c97782cb.js",
+        "/main-es2015.cf28eec717038a6e7aab.js",
+        "/main-es5.cf28eec717038a6e7aab.js",
         "/manifest.webmanifest",
         "/polyfills-es2015.5b10b8fd823b6392f1fd.js",
         "/polyfills-es5.3e8196928d184a6e5319.js",
@@ -26,6 +26,7 @@
       "installMode": "lazy",
       "updateMode": "prefetch",
       "urls": [
+        "/assets/about.json",
         "/assets/css.css",
         "/assets/icon.css",
         "/assets/icons/icon-128x128.png",
@@ -42,6 +43,7 @@
   ],
   "dataGroups": [],
   "hashTable": {
+    "/assets/about.json": "5e2d7ba96c21435c842923419be8984b95c4dbb9",
     "/assets/css.css": "b4a2043e02d3ff6a25e211e9d3740730940e025f",
     "/assets/icon.css": "91b359eac549ecaf5b8b8e435e13589d00e61e43",
     "/assets/icons/icon-128x128.png": "dae3b6ed49bdaf4327b92531d4b5b4a5d30c7532",
@@ -53,10 +55,10 @@
     "/assets/icons/icon-72x72.png": "c457e56089a36952cd67156f9996bc4ce54a5ed9",
     "/assets/icons/icon-96x96.png": "3914125a4b445bf111c5627875fc190f560daa41",
     "/favicon.ico": "22f6a4a3bcaafafb0254e0f2fa4ceb89e505e8b2",
-    "/index.html": "3d268efe2a326893f4dcbd9350073a1265288838",
-    "/main-es2015.505d56f0f362c97782cb.js": "7f89430912c14dc5ef678ef886f72cbb918a485e",
-    "/main-es5.505d56f0f362c97782cb.js": "76bd97d777ab57ac2848af3d855f33c13f478eeb",
-    "/manifest.webmanifest": "83decc024284675b39b9e382065b3d4331130f51",
+    "/index.html": "f7d6ee50c044a2c662ebaa5857242ae09cc12ae8",
+    "/main-es2015.cf28eec717038a6e7aab.js": "af1c433ad7313f55879b4440096a0eebbcd7b3f2",
+    "/main-es5.cf28eec717038a6e7aab.js": "347ed8fd3bea17fad4d4f1ea7c32b91be258755f",
+    "/manifest.webmanifest": "3cb86f76b4e7e80832bf77756673ad0fecc48eb4",
     "/polyfills-es2015.5b10b8fd823b6392f1fd.js": "9abfe15f17820a646e3d51c420908d9f8f7b69b8",
     "/polyfills-es5.3e8196928d184a6e5319.js": "4b2c164ca0775cd3d101e08c7fcbff16579414e4",
     "/runtime-es2015.c5fa8325f89fc516600b.js": "a9aafcf49f49145093fc831efd9b8e2f6c71bb9c",
