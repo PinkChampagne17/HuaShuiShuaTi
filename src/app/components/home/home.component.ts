@@ -6,6 +6,18 @@ import { ToastService, ToastBackgroundColor } from 'src/app/services/toast.servi
 import { DialogService, DialogData } from 'src/app/services/dialog.service';
 import { ToolbarService } from 'src/app/services/toolbar.service';
 import { LibraryInfo } from 'src/app/Library/question-service';
+import { HttpClient } from '@angular/common/http';
+
+interface AboutMessage {
+  version: string;
+  year: number;
+  name: string;
+}
+
+interface AboutJson {
+  version: string;
+  name: string;
+}
 
 @Component({
   selector: 'app-home',
@@ -15,12 +27,15 @@ import { LibraryInfo } from 'src/app/Library/question-service';
 export class HomeComponent {
 
   public libraries: Array<LibraryInfo>;
+
   public newLibraryName: string = "";
+  public about: AboutMessage;
 
   @ViewChild("fileInput", { static: true })
   private fileInputElement: ElementRef;
 
   constructor(
+    private http: HttpClient,
     private toastService: ToastService,
     private dialogService: DialogService,
     private toolbarService: ToolbarService,
@@ -29,6 +44,16 @@ export class HomeComponent {
 
     this.toolbarService.greet();
     this.updateLibraries();
+
+    this.about = {
+      version: "Loading...",
+      name: "Loading...",
+      year: new Date().getFullYear(),
+    }
+    this.http.get<AboutJson>("assets/about.json").subscribe(result => {
+      this.about.version = result.version;
+      this.about.name = result.name;
+    });
   }
 
   updateLibraries() {

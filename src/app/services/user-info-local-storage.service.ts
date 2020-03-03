@@ -9,7 +9,7 @@ export class UserInfoLocalStorageService implements IUserInfoService {
 
   public isAvailable: boolean;
   
-  private key = "UserInfo";
+  private key = "HSST_UserInfo";
 
   constructor(private toastService: ToastService) { 
     this.isAvailable = localStorage != undefined;

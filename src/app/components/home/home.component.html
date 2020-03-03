@@ -25,7 +25,12 @@
             </mat-card>
             
             <div style="color: rgb(122, 122, 122); font-size: smaller;">
-                <span class="horizontal-center" style="display: table;">Version: 20.03.01.0</span>
+                <span class="horizontal-center" style="display: table;">
+                    Version: {{ about.version }}
+                </span>
+                <span class="horizontal-center" style="display: table;">
+                    &copy; 2020-{{ about.year }} {{ about.name }}
+                </span>
                 <p style="text-indent: 2em;">
                     推荐使用Microsoft Edge(Chromium)或Google chrome浏览器使用本应用。
                     PC端点击地址栏右侧的“+”图标可将本应用添加到桌面上，
@@ -38,10 +43,5 @@
     <mat-tab label="我">
         <app-edit-user-info></app-edit-user-info>
     </mat-tab>
-
-    <mat-tab label="关于">
-        <p style="text-align: center;">&copy; 2020 GitHub@PinkChampagne17</p>
-    </mat-tab>
-    
 </mat-tab-group>
   

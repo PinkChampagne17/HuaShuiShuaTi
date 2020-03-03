@@ -20,15 +20,17 @@ class LsQuestions{
 })
 export class QuestionsLocalStorageService implements IQuestionsService{
 
+  private libraryListKey = "HSST_Library";
+
   getAllLibraries(): Array<LibraryInfo> {
-    let librariesStr = localStorage.getItem("library");
+    let librariesStr = localStorage.getItem(this.libraryListKey);
     return librariesStr == null ? [] : JSON.parse(librariesStr);
   }
 
   private librariesAction(callbackfn: (libraries: Array<LibraryInfo>) => void) : void {
     let libraries: Array<LibraryInfo> = this.getAllLibraries();
     callbackfn(libraries);
-    localStorage.setItem("library", JSON.stringify(libraries));
+    localStorage.setItem(this.libraryListKey, JSON.stringify(libraries));
   }
 
   private QuestionsAction(libraryInfo: LibraryInfo, callbackfn: (lsQuestions: LsQuestions) => void) : void {
@@ -40,7 +42,7 @@ export class QuestionsLocalStorageService implements IQuestionsService{
 
   addLibrary(name: string, creater: string): void {
     let datestr = new Date().toUTCString();
-    let id = `${name}_${creater}_${datestr}`;
+    let id = `HSST_${name}_${creater}_${datestr}`;
 
     this.librariesAction(libraries => {
       libraries.push({
