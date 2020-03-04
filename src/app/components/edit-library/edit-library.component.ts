@@ -6,6 +6,7 @@ import { LibraryInfo, Question, QuestionType } from 'src/app/Library/question-se
 import { ToastService, ToastBackgroundColor } from 'src/app/services/toast.service';
 import { DialogService, DialogData } from 'src/app/services/dialog.service';
 import { ToolbarService } from 'src/app/services/toolbar.service';
+import { QuestionsLocalforageService } from 'src/app/services/questions-localforage.service';
 
 @Component({
   selector: 'app-edit-library',
@@ -29,14 +30,16 @@ export class EditLibraryComponent {
     private toastService: ToastService,
     private dialogService: DialogService,
     private toolbarService: ToolbarService,
-    private questionService: QuestionsLocalStorageService){
-      
-    this.questionService = questionService;
+    private questionService: QuestionsLocalforageService){
     
     let id: string = this.route.snapshot.paramMap.get('id');
-    this.libraryInfo = this.questionService.getAllLibraries().find(lib => lib.id == id);
-    this.questions = this.questionService.getAllQuestions(this.libraryInfo);
-    this.toolbarService.message = this.libraryName = this.libraryInfo.name;
+
+    this.questionService.getAllLibraries().then(result => {
+      this.libraryInfo = result.find(lib => lib.id == id)
+      this.toolbarService.message = this.libraryName = this.libraryInfo.name;
+    });
+
+    this.updateQuestions();
 
     this.newQuestionViewModel =  {
       id: -1,
@@ -62,7 +65,9 @@ export class EditLibraryComponent {
   }
 
   updateQuestions() {
-    this.questions = this.questionService.getAllQuestions(this.libraryInfo);
+    this.questionService.getAllQuestions(this.libraryInfo).then(result => {
+      this.questions = result;
+    })
   }
 
   saveQuestion(id: number) {
@@ -132,10 +137,12 @@ export class EditLibraryComponent {
 
   export() {
     let element = this.exportElement.nativeElement;
-    element.setAttribute('href',
-      'data:text/plain;charset=utf-8,' + encodeURIComponent(this.questionService.export(this.libraryInfo)));
-    element.setAttribute('download', `${this.libraryInfo.name}_${this.libraryInfo.creater}.json`);
-    element.click();
+    this.questionService.export(this.libraryInfo).then(result => {
+      element.setAttribute('href',
+        'data:text/plain;charset=utf-8,' + result);
+      element.setAttribute('download', `${this.libraryInfo.name}_${this.libraryInfo.creater}.json`);
+      element.click();
+    })
     this.toastService.show("题库文件已添加至下载列表中", ToastBackgroundColor.success, 5000);
   }
 

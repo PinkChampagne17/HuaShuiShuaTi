@@ -18,7 +18,7 @@ class LsQuestions{
 @Injectable({
   providedIn: 'root'
 })
-export class QuestionsLocalStorageService implements IQuestionsService{
+export class QuestionsLocalStorageService implements IQuestionsService {
 
   private libraryListKey = "HSST_Library";
 

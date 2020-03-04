@@ -1,4 +1,5 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 
 import { QuestionsLocalStorageService } from 'src/app/services/questions-local-storage.service';
 import { UserInfoLocalStorageService } from 'src/app/services/user-info-local-storage.service';
@@ -6,7 +7,7 @@ import { ToastService, ToastBackgroundColor } from 'src/app/services/toast.servi
 import { DialogService, DialogData } from 'src/app/services/dialog.service';
 import { ToolbarService } from 'src/app/services/toolbar.service';
 import { LibraryInfo } from 'src/app/Library/question-service';
-import { HttpClient } from '@angular/common/http';
+import { QuestionsLocalforageService } from 'src/app/services/questions-localforage.service';
 
 interface AboutMessage {
   version: string;
@@ -40,7 +41,7 @@ export class HomeComponent {
     private dialogService: DialogService,
     private toolbarService: ToolbarService,
     private userInfoService: UserInfoLocalStorageService,
-    private questionService: QuestionsLocalStorageService) {
+    private questionService: QuestionsLocalforageService) {
 
     this.toolbarService.greet();
     this.updateLibraries();
@@ -54,10 +55,13 @@ export class HomeComponent {
       this.about.version = result.version;
       this.about.name = result.name;
     });
+    
   }
 
   updateLibraries() {
-    this.libraries = this.questionService.getAllLibraries();
+    this.questionService.getAllLibraries().then(result => {
+      this.libraries = result;
+    });
   }
 
   addLibrary() {

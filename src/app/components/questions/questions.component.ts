@@ -4,6 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { IQuestionsService, Question, LibraryInfo } from 'src/app/Library/question-service';
 import { QuestionsLocalStorageService } from 'src/app/services/questions-local-storage.service';
 import { ProgressBarService } from 'src/app/services/progress-bar.service';
+import { QuestionsLocalforageService } from 'src/app/services/questions-localforage.service';
 
 export interface AnswerDetail {
   index: number;
@@ -27,21 +28,20 @@ export class QuestionsComponent {
   public contentSwitch: boolean;
   public questions: Array<Question>;
   public detail: AnswerDetail;
-
-  private questionsService: IQuestionsService;
   private libraryInfo: LibraryInfo;
 
   constructor(
     private route: ActivatedRoute,
     private progressBarService: ProgressBarService,
-    questionsLocalStorageService: QuestionsLocalStorageService) {
-
-      this.questionsService = questionsLocalStorageService;
+    private questionsService: QuestionsLocalforageService) {
 
       let id = this.route.snapshot.paramMap.get('id');
-      this.libraryInfo = this.questionsService.getAllLibraries().find(lib => lib.id == id);
-      this.questions = this.questionsService.getAllQuestions(this.libraryInfo);
-
+      this.questionsService.getAllLibraries().then(result => {
+        this.libraryInfo = result.find(lib => lib.id == id);
+        this.questionsService.getAllQuestions(this.libraryInfo).then(result => {
+          this.questions = result;
+        });
+      });
       this.reset();
   }
 
