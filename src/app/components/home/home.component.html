@@ -3,7 +3,7 @@
 
 <mat-tab-group mat-align-tabs="center">
     <mat-tab label="主页">
-        <div class="content">
+        <div *ngIf="hasLoaded" class="content">
             <mat-card *ngFor="let lib of libraries">
                 <p>{{ lib.name }}</p>
                 <p>创建人：{{ lib.creater }}</p>

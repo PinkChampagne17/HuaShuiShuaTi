@@ -2,11 +2,11 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { QuestionsLocalStorageService } from 'src/app/services/questions-local-storage.service';
-import { LibraryInfo, Question, QuestionType } from 'src/app/Library/question-service';
+import { QuestionsLocalforageService } from 'src/app/services/questions-localforage.service';
 import { ToastService, ToastBackgroundColor } from 'src/app/services/toast.service';
+import { Library, Question, QuestionType } from 'src/app/Library/question-service';
 import { DialogService, DialogData } from 'src/app/services/dialog.service';
 import { ToolbarService } from 'src/app/services/toolbar.service';
-import { QuestionsLocalforageService } from 'src/app/services/questions-localforage.service';
 
 @Component({
   selector: 'app-edit-library',
@@ -15,13 +15,11 @@ import { QuestionsLocalforageService } from 'src/app/services/questions-localfor
 })
 export class EditLibraryComponent {
 
-  public libraryName: string;
-  public libraryInfo: LibraryInfo;
+  public library: Library;
   public questions: Array<Question>;
+  public hasLoaded: boolean = false;
   public newQuestionViewModel: Question;
 
-  @ViewChild("content", { static: true })
-  private contentElement: ElementRef;
   @ViewChild("exportElement", { static: true })
   private exportElement: ElementRef;
 
@@ -30,18 +28,19 @@ export class EditLibraryComponent {
     private toastService: ToastService,
     private dialogService: DialogService,
     private toolbarService: ToolbarService,
-    private questionService: QuestionsLocalforageService){
-    
-    let id: string = this.route.snapshot.paramMap.get('id');
+    private questionsService: QuestionsLocalforageService){
+      
+      let id = this.route.snapshot.paramMap.get('id');
+      this.questionsService.getLibrary(id).then(lib => {
+        this.library = lib;
+        this.toolbarService.message = this.library.name;
+        this.updateQuestions();
+        this.resetViewModel();
+      });
+  }
 
-    this.questionService.getAllLibraries().then(result => {
-      this.libraryInfo = result.find(lib => lib.id == id)
-      this.toolbarService.message = this.libraryName = this.libraryInfo.name;
-    });
-
-    this.updateQuestions();
-
-    this.newQuestionViewModel =  {
+  private resetViewModel() {
+    this.newQuestionViewModel = {
       id: -1,
       title: "",
       type: QuestionType.MultipleChoice,
@@ -61,20 +60,24 @@ export class EditLibraryComponent {
   }
 
   ngOnDestroy() {
-    this.questionService.setLibraryName(this.libraryInfo, this.libraryName);
+    this.questionsService.setLibraryName(this.library.id, this.library.name);
   }
 
   updateQuestions() {
-    this.questionService.getAllQuestions(this.libraryInfo).then(result => {
-      this.questions = result;
-    })
+    this.questionsService.getAllQuestions(this.library.id).then(questions => {
+      this.questions = questions;
+      this.hasLoaded = true;
+    });
   }
 
   saveQuestion(id: number) {
-    if(!this.questionCheck(this.questions.find(q => q.id == id))) {
+    let question = this.questions.find(q => q.id == id);
+
+    if (!this.questionCheck(question)) {
       return;
     }
-    this.questionService.setQuestion(this.libraryInfo, id, this.questions.find(q => q.id == id));
+
+    this.questionsService.setQuestion(this.library.id, question);
     this.toastService.show("已保存", ToastBackgroundColor.success);
   }
 
@@ -83,28 +86,24 @@ export class EditLibraryComponent {
       title: "Are you sure?",
       content:`确认要删除该题吗？`
     };
-    this.dialogService.openDialog(data, result => {
-      if(result) {
-        this.questionService.removeQuestion(this.libraryInfo, id);
-        this.updateQuestions();
+    this.dialogService.openDialog(data, input => {
+      if(input) {
+        this.questionsService.removeQuestion(this.library.id, id);
+        this.questions.splice(this.questions.findIndex( q => q.id == id), 1);
         this.toastService.show("已删除", ToastBackgroundColor.success);
       }
     });
   }
 
-  addQuestion() {
+  async addQuestion() {
     if(!this.questionCheck(this.newQuestionViewModel)) {
       return;
     }
-
-    this.questionService.addQuestion(this.libraryInfo, this.newQuestionViewModel);
-    
-    this.newQuestionViewModel.title = "";
-    this.newQuestionViewModel.answerText = "";
-    this.newQuestionViewModel.options.forEach(option => option.text = "");
-    
-    this.toastService.show("添加完成", ToastBackgroundColor.success);
-    this.updateQuestions();
+    this.questionsService.addQuestion(this.library.id, this.newQuestionViewModel, () => {
+      this.toastService.show("添加完成", ToastBackgroundColor.success);
+      this.questions.push(this.newQuestionViewModel);
+      this.resetViewModel();
+    });
   }
 
   questionCheck(question: Question): boolean {
@@ -121,7 +120,7 @@ export class EditLibraryComponent {
       if(question.options[i].text.trim() == "") {
         this.toastService.show("选项文本不能为空", ToastBackgroundColor.danger, 5000);
         return false;
-      }  
+      }
     }
 
     return true;
@@ -137,12 +136,12 @@ export class EditLibraryComponent {
 
   export() {
     let element = this.exportElement.nativeElement;
-    this.questionService.export(this.libraryInfo).then(result => {
+    this.questionsService.export(this.library).then(result => {
       element.setAttribute('href',
         'data:text/plain;charset=utf-8,' + result);
-      element.setAttribute('download', `${this.libraryInfo.name}_${this.libraryInfo.creater}.json`);
+      element.setAttribute('download', `${this.library.name}_${this.library.creater}.json`);
       element.click();
-    })
+    });
     this.toastService.show("题库文件已添加至下载列表中", ToastBackgroundColor.success, 5000);
   }
 
@@ -151,7 +150,6 @@ export class EditLibraryComponent {
       document.getElementById(elementId).scrollIntoView(isTopAlign);
     }, timeout);
   }
-
 }
 
 

@@ -1,97 +1,103 @@
-<mat-toolbar color="primary">
-    <mat-toolbar-row>
-        <div *ngIf="!detail.isComplete">
-            <span class="toolbarButton" routerLink="/">返回主页</span>
-            <span class="recentMessage"
-                >第{{ detail.index + 1 }}/{{ questions.length }}题</span>
-        </div>
-    </mat-toolbar-row>
-</mat-toolbar>
+<ng-container *ngIf="questions && questions.length != 0; else noQuestion">
 
-<app-progress-bar></app-progress-bar>
-
-<div class="content" #questionsContent>
-
-    <ng-container *ngIf="!detail.isComplete; else completeView">
-        
-        <div [ngSwitch]="questions[detail.index].type" *ngIf="contentSwitch">
-
-            <mat-card style="margin-bottom: 15px;">
-                <!-- <mat-card-content> -->
-                    <p style="text-indent: 2em;">{{ questions[detail.index].title }}</p>
-                <!-- </mat-card-content> -->
-            </mat-card>
-    
-            <app-multiple-choice
-                *ngSwitchCase="0"
-                [detail]="detail"
-                [options]="questions[detail.index].options"
-                [isTrueOrFalse]="false"
-                [questionsContentElement]="questionsContentElement"></app-multiple-choice>
-    
-            <app-multiple-answers 
-                *ngSwitchCase="1"
-                [detail]="detail"
-                [options]="questions[detail.index].options"></app-multiple-answers>
-    
-            <app-multiple-choice
-                *ngSwitchCase="2"
-                [detail]="detail"
-                [options]="questions[detail.index].options"
-                [isTrueOrFalse]="true"
-                [questionsContentElement]="questionsContentElement"></app-multiple-choice>
-    
-            <app-fill-in-the-blank
-                *ngSwitchCase="3"
-                [detail]="detail"
-                [answer]="questions[detail.index].answerText"></app-fill-in-the-blank>
-    
-            <!-- 单选题、多选题、判断题 -->
-            <button mat-raised-button color="orange"
-                *ngIf="detail.isAnswered && [0,1,2].indexOf(questions[detail.index].type) != -1"
-                (click)="nextQuestion()">下一题</button>
-    
-            <!-- 多选题 -->
-            <button mat-raised-button color="orange"
-                *ngIf="!detail.isAnswered && questions[detail.index].type == 1"
-                (click)="detail.isAnswered = true">确认</button>
-    
-            <!-- 填空题 -->
-            <div *ngIf="questions[detail.index].type == 3">
-
-                <ng-container *ngIf="!detail.isAnswered; else FitbButton">
-
-                    <button mat-raised-button color="orange"
-                        (click)="detail.isSkipped = true">我不会</button>
-
-                </ng-container>
-
-                <ng-template #FitbButton>
-
-                    <button mat-raised-button color="orange" style="width: 50%;"
-                        (click)="nextQuestion()"
-                        >{{ detail.isSkipped ? "记住了吗？" : "回答正确！" }}下一题</button>
-
-                </ng-template>
+    <mat-toolbar color="primary">
+        <mat-toolbar-row>
+            <div *ngIf="!detail.isComplete">
+                <span class="toolbarButton" routerLink="/">返回主页</span>
+                <span class="recentMessage"
+                    >第{{ detail.index + 1 }}/{{ questions.length }}题</span>
             </div>
-        </div>
-    </ng-container>
-
-    <ng-template #completeView>
-
-        <div style="text-align: center;">
-            <mat-card>
-                <!-- <mat-card-content> -->
-                    <p>你完成了所有的题目！</p>
-                    <p>题目总数：{{ questions.length }}</p>
-                    <p>正确题数：{{ this.detail.rigthAnswers }}</p>
-                    <p>正确率：{{ this.detail.rigthAnswers / questions.length * 100 }}%</p>
-                <!-- </mat-card-content> -->
-            </mat-card>
-            <br>
-            <button mat-raised-button color="primary" (click)="reset()">再来一遍</button>
-            <br>
-            <button mat-raised-button color="primary" routerLink="/">返回主页</button>
-        </div>
-    </ng-template>
-</div>
+        </mat-toolbar-row>
+    </mat-toolbar>
+    
+    <app-progress-bar></app-progress-bar>
+    
+    <div class="content" #questionsContent>
+    
+        <ng-container *ngIf="!detail.isComplete; else completeView">
+            
+            <div [ngSwitch]="questions[detail.index].type" *ngIf="contentSwitch">
+    
+                <mat-card style="margin-bottom: 15px;">
+                    <!-- <mat-card-content> -->
+                        <p style="text-indent: 2em;">{{ questions[detail.index].title }}</p>
+                    <!-- </mat-card-content> -->
+                </mat-card>
+        
+                <app-multiple-choice
+                    *ngSwitchCase="0"
+                    [detail]="detail"
+                    [options]="questions[detail.index].options"
+                    [isTrueOrFalse]="false"
+                    [questionsContentElement]="questionsContentElement"></app-multiple-choice>
+        
+                <app-multiple-answers 
+                    *ngSwitchCase="1"
+                    [detail]="detail"
+                    [options]="questions[detail.index].options"></app-multiple-answers>
+        
+                <app-multiple-choice
+                    *ngSwitchCase="2"
+                    [detail]="detail"
+                    [options]="questions[detail.index].options"
+                    [isTrueOrFalse]="true"
+                    [questionsContentElement]="questionsContentElement"></app-multiple-choice>
+        
+                <app-fill-in-the-blank
+                    *ngSwitchCase="3"
+                    [detail]="detail"
+                    [answer]="questions[detail.index].answerText"></app-fill-in-the-blank>
+        
+                <!-- 单选题、多选题、判断题 -->
+                <button mat-raised-button color="orange"
+                    *ngIf="detail.isAnswered && [0,1,2].indexOf(questions[detail.index].type) != -1"
+                    (click)="nextQuestion()">下一题</button>
+        
+                <!-- 多选题 -->
+                <button mat-raised-button color="orange"
+                    *ngIf="!detail.isAnswered && questions[detail.index].type == 1"
+                    (click)="detail.isAnswered = true">确认</button>
+        
+                <!-- 填空题 -->
+                <div *ngIf="questions[detail.index].type == 3">
+    
+                    <ng-container *ngIf="!detail.isAnswered; else FitbButton">
+    
+                        <button mat-raised-button color="orange"
+                            (click)="detail.isSkipped = true">我不会</button>
+    
+                    </ng-container>
+    
+                    <ng-template #FitbButton>
+    
+                        <button mat-raised-button color="orange" style="width: 50%;"
+                            (click)="nextQuestion()"
+                            >{{ detail.isSkipped ? "记住了吗？" : "回答正确！" }}下一题</button>
+    
+                    </ng-template>
+                </div>
+            </div>
+        </ng-container>
+    
+        <ng-template #completeView>
+    
+            <div style="text-align: center;">
+                <mat-card>
+                    <!-- <mat-card-content> -->
+                        <p>你完成了所有的题目！</p>
+                        <p>题目总数：{{ questions.length }}</p>
+                        <p>正确题数：{{ this.detail.rigthAnswers }}</p>
+                        <p>正确率：{{ this.detail.rigthAnswers / questions.length * 100 }}%</p>
+                    <!-- </mat-card-content> -->
+                </mat-card>
+                <br>
+                <button mat-raised-button color="primary" (click)="reset()">再来一遍</button>
+                <br>
+                <button mat-raised-button color="primary" routerLink="/">返回主页</button>
+            </div>
+        </ng-template>
+    </div>
+</ng-container>
+<ng-template #noQuestion>
+    没问题
+</ng-template>

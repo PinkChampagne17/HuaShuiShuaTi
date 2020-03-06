@@ -3,17 +3,11 @@ import { HttpClient } from '@angular/common/http';
 
 import { QuestionsLocalStorageService } from 'src/app/services/questions-local-storage.service';
 import { UserInfoLocalStorageService } from 'src/app/services/user-info-local-storage.service';
+import { QuestionsLocalforageService } from 'src/app/services/questions-localforage.service';
 import { ToastService, ToastBackgroundColor } from 'src/app/services/toast.service';
 import { DialogService, DialogData } from 'src/app/services/dialog.service';
 import { ToolbarService } from 'src/app/services/toolbar.service';
-import { LibraryInfo } from 'src/app/Library/question-service';
-import { QuestionsLocalforageService } from 'src/app/services/questions-localforage.service';
-
-interface AboutMessage {
-  version: string;
-  year: number;
-  name: string;
-}
+import { Library } from 'src/app/Library/question-service';
 
 interface AboutJson {
   version: string;
@@ -27,10 +21,15 @@ interface AboutJson {
 })
 export class HomeComponent {
 
-  public libraries: Array<LibraryInfo>;
-
+  public libraries: Array<Library>;
+  
+  public hasLoaded: boolean = false;
   public newLibraryName: string = "";
-  public about: AboutMessage;
+  public about = {
+    version: "Loading...",
+    name: "Loading...",
+    year: new Date().getFullYear(),
+  };
 
   @ViewChild("fileInput", { static: true })
   private fileInputElement: ElementRef;
@@ -42,25 +41,20 @@ export class HomeComponent {
     private toolbarService: ToolbarService,
     private userInfoService: UserInfoLocalStorageService,
     private questionService: QuestionsLocalforageService) {
-
-    this.toolbarService.greet();
+    
     this.updateLibraries();
+    this.toolbarService.greet();
 
-    this.about = {
-      version: "Loading...",
-      name: "Loading...",
-      year: new Date().getFullYear(),
-    }
     this.http.get<AboutJson>("assets/about.json").subscribe(result => {
       this.about.version = result.version;
       this.about.name = result.name;
     });
-    
   }
 
   updateLibraries() {
-    this.questionService.getAllLibraries().then(result => {
-      this.libraries = result;
+    this.questionService.getAllLibraries().then(libs => {
+      this.libraries = libs;
+      this.hasLoaded = true;
     });
   }
 
@@ -71,15 +65,16 @@ export class HomeComponent {
       this.toastService.show("题库名不能为空", ToastBackgroundColor.danger, 5000);
       return;
     }
-    else if(userInfo == null) {
+    if(userInfo == null) {
       this.toastService.show("创建题库前，请先设置用户名", ToastBackgroundColor.danger, 5000);
       return;
     }
     
-    this.questionService.addLibrary(this.newLibraryName, userInfo.name);
-    this.toastService.show("添加成功", ToastBackgroundColor.success);
-    this.newLibraryName = "";
-    this.updateLibraries();
+    this.questionService.addLibrary(this.newLibraryName, userInfo.name, () => {
+      this.toastService.show(`添加题库${this.newLibraryName}成功`, ToastBackgroundColor.success);
+      this.newLibraryName = "";
+      this.updateLibraries();
+    });
   }
 
   removeLibrary(id: string) {
@@ -90,8 +85,8 @@ export class HomeComponent {
     this.dialogService.openDialog(dialogData, result => {
       if(result) {
         this.questionService.removeLibrary(id);
-        this.updateLibraries();
         this.toastService.show("已删除", ToastBackgroundColor.success);
+        this.updateLibraries();
       }
     });
   }

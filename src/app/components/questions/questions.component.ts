@@ -1,10 +1,11 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { IQuestionsService, Question, LibraryInfo } from 'src/app/Library/question-service';
+import { IQuestionsService, Question, Library } from 'src/app/Library/question-service';
 import { QuestionsLocalStorageService } from 'src/app/services/questions-local-storage.service';
 import { ProgressBarService } from 'src/app/services/progress-bar.service';
 import { QuestionsLocalforageService } from 'src/app/services/questions-localforage.service';
+import { FisherYates } from 'src/app/Library/fisher-yates';
 
 export interface AnswerDetail {
   index: number;
@@ -28,21 +29,18 @@ export class QuestionsComponent {
   public contentSwitch: boolean;
   public questions: Array<Question>;
   public detail: AnswerDetail;
-  private libraryInfo: LibraryInfo;
 
   constructor(
     private route: ActivatedRoute,
     private progressBarService: ProgressBarService,
     private questionsService: QuestionsLocalforageService) {
 
-      let id = this.route.snapshot.paramMap.get('id');
-      this.questionsService.getAllLibraries().then(result => {
-        this.libraryInfo = result.find(lib => lib.id == id);
-        this.questionsService.getAllQuestions(this.libraryInfo).then(result => {
-          this.questions = result;
-        });
-      });
-      this.reset();
+  }
+
+  async ngOnInit(): Promise<void> {
+    let id = this.route.snapshot.paramMap.get('id');
+    this.questions = await this.questionsService.getAllQuestions(id, true);
+    this.reset();
   }
 
   nextQuestion(): void {
@@ -76,11 +74,6 @@ export class QuestionsComponent {
       isSkipped: false,
       isComplete: false
     }
-
-    if(this.questions.length == 0) {
-      this.detail.isComplete = true;
-    }
-
     this.contentSwitch = true;
     this.progressBarService.setValue(0);
   }

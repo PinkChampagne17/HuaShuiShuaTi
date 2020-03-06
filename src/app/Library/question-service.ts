@@ -1,8 +1,8 @@
-export interface LibraryInfo{
+export interface Library{
     id: string;
     name: string;
     creater: string;
-    date: string;
+    date: Date;
 }
 
 export enum QuestionType {
@@ -26,16 +26,17 @@ export interface Question {
 }
 
 export interface IQuestionsService {
-    addLibrary(name: string, creater: string): void;
+    addLibrary(name: string, creater: string, callbackfn: () => void): void;
     removeLibrary(id: string): void;
-    getAllLibraries(): Promise<Array<LibraryInfo>>;
-    setLibraryName(libraryInfo: LibraryInfo, name: string): void;
+    getLibrary(id: string): Promise<Library>;
+    getAllLibraries(): Promise<Array<Library>>;
+    setLibraryName(id: string, name: string): void;
 
-    addQuestion(libraryInfo: LibraryInfo, question: Question): void;
-    removeQuestion(libraryInfo: LibraryInfo, questionId: number): void;
-    getAllQuestions(libraryInfo: LibraryInfo): Promise<Array<Question>>;
-    setQuestion(libraryInfo: LibraryInfo, id: number, question:Question): void;
+    addQuestion(libraryId: string, question: Question, callbackfn: () => void): void;
+    removeQuestion(libraryId: string, questionId: number): void;
+    getAllQuestions(libraryId: string): Promise<Array<Question>>;
+    setQuestion(libraryId: string, question: Question): void;
 
-    export(libraryInfo: LibraryInfo): Promise<string>;
+    export(lib: Library): Promise<string>;
     import(data: any): boolean;
 }

@@ -1,7 +1,7 @@
 <app-toolbar id="edit-library-header"></app-toolbar>
 <app-progress-bar></app-progress-bar>
 
-<div id="edit-library-component-content" class="content">
+<div *ngIf="hasLoaded" id="edit-library-component-content" class="content">
 
     <button mat-raised-button color="primary"
         routerLink="/">返回主页</button>
@@ -17,11 +17,11 @@
 
     <mat-form-field class="example-full-width">
         <mat-label>题库名（返回主页后保存）</mat-label>
-        <input matInput placeholder="" [(ngModel)]="libraryName">
+        <input matInput placeholder="" [(ngModel)]="library.name">
     </mat-form-field>
     
     <mat-card style="margin-bottom: 15px;">
-        <p>创建者：{{ libraryInfo.creater }}</p>
+        <p>创建者：{{ library.creater }}</p>
         <p>题目数量：{{ questions.length }}</p>
     </mat-card>
     

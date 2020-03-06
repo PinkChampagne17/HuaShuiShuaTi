@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { IQuestionsService, LibraryInfo, Question } from '../Library/question-service';
+import { IQuestionsService, Library, Question } from '../Library/question-service';
 
 import * as localforage from 'src/assets/js/localforage.min.js';
 
@@ -15,105 +15,100 @@ export class QuestionsLocalforageService implements IQuestionsService {
       name: "HSST_librariesInfo"
     });
   }
-
-  private questionsAction(lib: LibraryInfo, callbackfn: (databaseInstance) => void) {
-    let instance = localforage.createInstance({
-      name: lib.id
-    });
-    callbackfn(instance);
+  
+  private getQuestionsRepository(id: string): any {
+    return localforage.createInstance({ name: id });
   }
 
-  public addLibrary(name: string, creater: string): void {
-    let dateStr = new Date().toUTCString();
+  public async getLibrary(id: string): Promise<Library> {
+    let libs = await this.getAllLibraries();
+    let lib = libs.find(lib => lib.id == id);
+    return lib;
+  }
 
-    let libraryInfo: LibraryInfo = {
+  public addLibrary(name: string, creater: string, callbackfn: () => void): void {
+    let dateStr = new Date().toUTCString();
+    let lib = {
       id: `HSST_${creater}_${name}_${dateStr}`,
       name: name,
       creater: creater,
       date: dateStr
     };
 
-    this.librariesInfoRepository.setItem(libraryInfo.id, libraryInfo);
+    this.librariesInfoRepository.setItem(lib.id, lib).then(callbackfn);
   }
 
   public removeLibrary(id: string): void {
     this.librariesInfoRepository.removeItem(id);
   }
 
-  async getAllLibraries(): Promise<LibraryInfo[]> {
-    let libraries: LibraryInfo[] = [];
-
-    await this.librariesInfoRepository.keys().then((keys) => {
-      keys.forEach(key => {
-        this.librariesInfoRepository.getItem(key).then(lib => {
-          lib.date = new Date(lib.date);
-          libraries.push(lib);
+  async getAllLibraries(): Promise<Library[]> {
+    let libs: Library[] = [];
+    await this.librariesInfoRepository.iterate((value, key, iterationNumber) => {
+        libs.unshift({
+          id: value.id,
+          name: value.name,
+          creater: value.creater,
+          date: new Date(value.date)
         });
-      });
     });
-
-    return libraries;
+    return libs;
   }
 
-  public setLibraryName(libraryInfo: LibraryInfo, name: string): void {
-    libraryInfo.name = name;
-    this.librariesInfoRepository.setItem(libraryInfo.id, libraryInfo);
+  public setLibraryName(id: string, name: string): void {
+    this.librariesInfoRepository.getItem(id).then(lib => {
+      lib.name = name;
+      this.librariesInfoRepository.setItem(id, lib);
+    });
   }
 
-  public addQuestion(libraryInfo: LibraryInfo, question: Question): void {
-    this.questionsAction(libraryInfo, (questions) => {
-        questions.length().then(length => {
-        question.id = length;
-        questions.setItem(length.toString(), question);
-      });
-    });
+  public async addQuestion(libraryId: string, question: Question, callbackfn: () => void): Promise<void> {
+    let repository = this.getQuestionsRepository(libraryId);
+    let keys = await repository.keys();
+    question.id = keys.length == 0 ? 0 : Number.parseInt(keys.pop()) + 1;
+    repository.setItem(question.id, question).then(callbackfn);
   }
   
-  public removeQuestion(libraryInfo: LibraryInfo, questionId: number): void {
-    this.questionsAction(libraryInfo, (questions) => {
-      questions.removeItem(questionId.toString());
-    });
+  public removeQuestion(libraryId: string, questionId: number): void {
+    let repository = this.getQuestionsRepository(libraryId);
+    repository.removeItem(questionId);
   }
 
-  public async getAllQuestions(libraryInfo: LibraryInfo): Promise<Question[]> {
-    let result: Question[];
-    await this.questionsAction(libraryInfo, (questions) => {
-      questions.iterate((value, key, iterationNumber) => {
-        result = value;
-      });
+  public async getAllQuestions(id: string, isRandom: boolean = false): Promise<Question[]> {
+    let questions: Question[] = [];
+
+    let repository = this.getQuestionsRepository(id);
+    
+    await repository.iterate((value, key, iterationNumber) => {
+      questions.push(value);
     });
-    return result;
+
+    return questions;
   }
 
-  public setQuestion(libraryInfo: LibraryInfo, id: number, question: Question): void {
-    this.questionsAction(libraryInfo, (questions) => {
-      questions.setItem(id.toString(), question);
-    });
+  public setQuestion(libraryId: string, question: Question): void {
+    this.getQuestionsRepository(libraryId).setItem(question.id, question);
   }
 
-  public async export(libraryInfo: LibraryInfo): Promise<string> {
-    let questions: Question[];
-    await this.getAllQuestions(libraryInfo).then(result => {
-      questions = result;
-    });
+  public async export(lib: Library): Promise<string> {
     return JSON.stringify({
-      lib: libraryInfo,
-      questions: questions
+      lib: lib,
+      questions: await this.getAllQuestions(lib.id)
     });
   }
 
   public import(data: any): boolean {
-    try {
-      this.librariesInfoRepository.setItem(data.lib.id, data.lib);
-      this.questionsAction(data.lib, questions => {
-        data.questions.forEach(quesiton => {
-          this.addQuestion(data.lib, quesiton);
-        });
-      })
-    }
-    catch(error) {
-      return false;
-    }
+    // try {
+    //   this.librariesInfoRepository.setItem(data.lib.id, data.lib);
+    //   this.getQuestionsRepository(data.lib, questionsRepository => {
+    //     data.questions.forEach(quesiton => {
+    //       this.addQuestion(data.lib, quesiton, () => {});
+    //     });
+    //   });
+    // }
+    // catch(error) {
+    //   return false;
+    // }
     return true;
   }
 
