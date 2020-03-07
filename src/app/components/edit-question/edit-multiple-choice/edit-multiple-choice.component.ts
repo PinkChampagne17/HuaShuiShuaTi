@@ -20,7 +20,7 @@ export class EditMultipleChoiceComponent {
   public set number(value: number) {
     this._number = value;
     while (this._number != this.questionViewModel.options.length) {
-      if(this._number > this.questionViewModel.options.length) {
+      if (this._number > this.questionViewModel.options.length) {
         this.questionViewModel.options.push({ text:"", isRight: false });
       }
       else {
@@ -34,7 +34,9 @@ export class EditMultipleChoiceComponent {
 
     if(index == -1) {
       index = this.number - 1;
+      console.log(index, this.questionViewModel.options)
       this.questionViewModel.options[index].isRight = true;
+      console.log(index, this.questionViewModel.options)
     }
     
     return index;
@@ -47,7 +49,7 @@ export class EditMultipleChoiceComponent {
   
   ngOnInit(): void {
     if(this.questionViewModel.options.length == 0) {
-      this.number = 2;
+      this.number = 4;
     }
     else {
       let allTrue = true;

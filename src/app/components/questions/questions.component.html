@@ -1,18 +1,16 @@
-<ng-container *ngIf="questions && questions.length != 0; else noQuestion">
+<mat-toolbar color="primary">
+    <mat-toolbar-row>
+        <span class="toolbarButton" routerLink="/" *ngIf="!detail.isComplete">返回主页</span>
+        <span class="recentMessage" *ngIf="hasLoaded && !detail.isComplete"
+            >第{{ detail.index + 1 }}/{{ questions.length }}题</span>
+    </mat-toolbar-row>
+</mat-toolbar>
 
-    <mat-toolbar color="primary">
-        <mat-toolbar-row>
-            <div *ngIf="!detail.isComplete">
-                <span class="toolbarButton" routerLink="/">返回主页</span>
-                <span class="recentMessage"
-                    >第{{ detail.index + 1 }}/{{ questions.length }}题</span>
-            </div>
-        </mat-toolbar-row>
-    </mat-toolbar>
-    
+<ng-container *ngIf="hasLoaded">
+
     <app-progress-bar></app-progress-bar>
     
-    <div class="content" #questionsContent>
+    <div class="content" id="questionsContent">
     
         <ng-container *ngIf="!detail.isComplete; else completeView">
             
@@ -28,8 +26,7 @@
                     *ngSwitchCase="0"
                     [detail]="detail"
                     [options]="questions[detail.index].options"
-                    [isTrueOrFalse]="false"
-                    [questionsContentElement]="questionsContentElement"></app-multiple-choice>
+                    [isTrueOrFalse]="false"></app-multiple-choice>
         
                 <app-multiple-answers 
                     *ngSwitchCase="1"
@@ -40,8 +37,7 @@
                     *ngSwitchCase="2"
                     [detail]="detail"
                     [options]="questions[detail.index].options"
-                    [isTrueOrFalse]="true"
-                    [questionsContentElement]="questionsContentElement"></app-multiple-choice>
+                    [isTrueOrFalse]="true"></app-multiple-choice>
         
                 <app-fill-in-the-blank
                     *ngSwitchCase="3"
@@ -98,6 +94,3 @@
         </ng-template>
     </div>
 </ng-container>
-<ng-template #noQuestion>
-    没问题
-</ng-template>

@@ -3,6 +3,18 @@ import { IQuestionsService, Library, Question } from '../Library/question-servic
 
 import * as localforage from 'src/assets/js/localforage.min.js';
 
+interface LfLibrary {
+  id: string;
+  name: string;
+  creater: string;
+  date: string;
+}
+
+interface LfLibraryAndQuestions {
+  library: LfLibrary;
+  questions: Array<Question>;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -15,15 +27,20 @@ export class QuestionsLocalforageService implements IQuestionsService {
       name: "HSST_librariesInfo"
     });
   }
+
+  // async ngOnInit(): Promise<void> {
+  //   let lengths = [];
+  //   await this.librariesInfoRepository.iterate((value, key, iterationNumber) => {
+  //     let repository = this.getLibrary(value.id)
+  //   });
+  // }
   
   private getQuestionsRepository(id: string): any {
     return localforage.createInstance({ name: id });
   }
 
   public async getLibrary(id: string): Promise<Library> {
-    let libs = await this.getAllLibraries();
-    let lib = libs.find(lib => lib.id == id);
-    return lib;
+    return await this.librariesInfoRepository.getItem(id);
   }
 
   public addLibrary(name: string, creater: string, callbackfn: () => void): void {
@@ -38,12 +55,15 @@ export class QuestionsLocalforageService implements IQuestionsService {
     this.librariesInfoRepository.setItem(lib.id, lib).then(callbackfn);
   }
 
-  public removeLibrary(id: string): void {
+  public async removeLibrary(id: string): Promise<void> {
     this.librariesInfoRepository.removeItem(id);
+    await this.getQuestionsRepository(id).dropInstance({ name: id });
   }
 
-  async getAllLibraries(): Promise<Library[]> {
-    let libs: Library[] = [];
+  private lengths: object = {};
+  async getAllLibraries(): Promise<Array<Library>> {
+    let libs: Array<Library> = [];
+
     await this.librariesInfoRepository.iterate((value, key, iterationNumber) => {
         libs.unshift({
           id: value.id,
@@ -51,7 +71,11 @@ export class QuestionsLocalforageService implements IQuestionsService {
           creater: value.creater,
           date: new Date(value.date)
         });
+        this.getQuestionsRepository(value.id).length().then(length => {
+          this.lengths[value.id] = length;
+        });
     });
+    libs.sort((x, y) => x.date < y.date ? 1 : -1);
     return libs;
   }
 
@@ -62,11 +86,14 @@ export class QuestionsLocalforageService implements IQuestionsService {
     });
   }
 
-  public async addQuestion(libraryId: string, question: Question, callbackfn: () => void): Promise<void> {
+  public async addQuestion(libraryId: string, question: Question): Promise<void> {
     let repository = this.getQuestionsRepository(libraryId);
+
     let keys = await repository.keys();
+
     question.id = keys.length == 0 ? 0 : Number.parseInt(keys.pop()) + 1;
-    repository.setItem(question.id, question).then(callbackfn);
+    
+    return repository.setItem(question.id, question);
   }
   
   public removeQuestion(libraryId: string, questionId: number): void {
@@ -90,27 +117,40 @@ export class QuestionsLocalforageService implements IQuestionsService {
     this.getQuestionsRepository(libraryId).setItem(question.id, question);
   }
 
-  public async export(lib: Library): Promise<string> {
-    return JSON.stringify({
-      lib: lib,
-      questions: await this.getAllQuestions(lib.id)
-    });
+  public async export(libraryId: string): Promise<string> {
+    let ex: LfLibraryAndQuestions = {
+      library: await this.librariesInfoRepository.getItem(libraryId),
+      questions: await this.getAllQuestions(libraryId)
+    };
+
+    return JSON.stringify(ex);
   }
 
-  public import(data: any): boolean {
-    // try {
-    //   this.librariesInfoRepository.setItem(data.lib.id, data.lib);
-    //   this.getQuestionsRepository(data.lib, questionsRepository => {
-    //     data.questions.forEach(quesiton => {
-    //       this.addQuestion(data.lib, quesiton, () => {});
-    //     });
-    //   });
-    // }
-    // catch(error) {
-    //   return false;
-    // }
+  public async import(data: string): Promise<boolean> {
+    if (!data) {
+      return false;
+    }
+
+    try {
+      let im: LfLibraryAndQuestions = JSON.parse(data);
+      let lib = im.library;
+      let questions = im.questions;
+
+      let questionRespository = await this.getQuestionsRepository(lib.id);
+      this.librariesInfoRepository.setItem(lib.id, lib);
+
+      questions.forEach(question => {
+        questionRespository.setItem(question.id, question);
+      });
+    }
+    catch(error) {
+      return false;
+    }
     return true;
   }
 
-  
+  public getLibraryLength(libraryId: string): number {
+    return this.lengths[libraryId];
+  }
+
 }

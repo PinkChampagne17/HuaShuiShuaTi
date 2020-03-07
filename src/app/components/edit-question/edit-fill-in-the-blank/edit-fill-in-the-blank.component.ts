@@ -23,8 +23,4 @@ export class EditFillInTheBlankComponent {
     this.questionViewModel.options = [];
   }
 
-  ngOnDestroy(): void {
-    this.questionViewModel.answerText = "";
-  }
-
 }

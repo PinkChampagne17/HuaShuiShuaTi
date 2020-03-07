@@ -1,8 +1,7 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { IQuestionsService, Question, Library } from 'src/app/Library/question-service';
-import { QuestionsLocalStorageService } from 'src/app/services/questions-local-storage.service';
+import { Question } from 'src/app/Library/question-service';
 import { ProgressBarService } from 'src/app/services/progress-bar.service';
 import { QuestionsLocalforageService } from 'src/app/services/questions-localforage.service';
 import { FisherYates } from 'src/app/Library/fisher-yates';
@@ -23,24 +22,26 @@ export interface AnswerDetail {
 })
 export class QuestionsComponent {
 
-  @ViewChild("questionsContent", { static: true })
-  public questionsContentElement: ElementRef;
-
   public contentSwitch: boolean;
   public questions: Array<Question>;
   public detail: AnswerDetail;
+  public hasLoaded: boolean = false;
 
   constructor(
     private route: ActivatedRoute,
     private progressBarService: ProgressBarService,
     private questionsService: QuestionsLocalforageService) {
 
+    this.reset(false);
   }
 
   async ngOnInit(): Promise<void> {
     let id = this.route.snapshot.paramMap.get('id');
-    this.questions = await this.questionsService.getAllQuestions(id, true);
-    this.reset();
+    this.questionsService.getAllQuestions(id, true).then(questions => {
+      this.questions = FisherYates.shuffle(questions);
+      this.contentSwitch = true;
+      this.hasLoaded = true;
+    });
   }
 
   nextQuestion(): void {
@@ -54,18 +55,22 @@ export class QuestionsComponent {
     this.detail.index += 1;
 
     this.progressBarService.setValue(this.detail.index / this.questions.length * 100);
+    
+    setTimeout(() => {
+      this.contentSwitch = true;
+    }, 1);
 
     if(this.detail.index == this.questions.length) {
       this.detail.isComplete = true;
       return;
     }
-
-    setTimeout(() => {
-      this.contentSwitch = true;
-    }, 1);
   }
 
-  reset() {
+  reset(canShuffle: boolean = true) {
+    if (canShuffle) {
+      this.questions = FisherYates.shuffle(this.questions);
+    }
+
     this.detail = {
       index: 0,
       rigthAnswers: 0,
@@ -74,7 +79,7 @@ export class QuestionsComponent {
       isSkipped: false,
       isComplete: false
     }
-    this.contentSwitch = true;
+
     this.progressBarService.setValue(0);
   }
 

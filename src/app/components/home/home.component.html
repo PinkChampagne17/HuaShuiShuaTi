@@ -3,46 +3,11 @@
 
 <mat-tab-group mat-align-tabs="center">
     <mat-tab label="主页">
-        <div *ngIf="hasLoaded" class="content">
-            <mat-card *ngFor="let lib of libraries">
-                <p>{{ lib.name }}</p>
-                <p>创建人：{{ lib.creater }}</p>
-                <p>创建时间：{{ lib.date | date:"yyyy-MM-dd HH:mm:ss" }}</p>
-                <button mat-raised-button color="primary" routerLink="/questions/{{ lib.id }}">开始</button>
-                <button mat-raised-button color="primary" routerLink="/editlibrary/{{ lib.id }}">编辑题库</button>
-                <button mat-raised-button color="accent" (click)="removeLibrary(lib.id)">删除</button>
-            </mat-card>
-
-            <mat-card>
-                <mat-form-field class="example-full-width">
-                    <mat-label>添加新题库</mat-label>
-                    <input matInput placeholder="题库名" [(ngModel)]="newLibraryName" (keyup.enter)="addLibrary()">
-                </mat-form-field>
-                <br>
-                <button mat-raised-button color="primary" (click)="addLibrary()">添加</button>
-                <button mat-raised-button color="primary" (click)="importButtonClick()">通过文件导入题库</button>
-                <input #fileInput style="display: none;" type="file" accept=".json" (change)="import($event)">
-            </mat-card>
-            
-            <div style="color: rgb(122, 122, 122); font-size: smaller;">
-                <span class="horizontal-center" style="display: table;">
-                    Version: {{ about.version }}
-                </span>
-                <span class="horizontal-center" style="display: table;">
-                    &copy; 2020-{{ about.year }} {{ about.name }}
-                </span>
-                <p style="text-indent: 2em;">
-                    推荐使用Microsoft Edge(Chromium)或Google chrome浏览器使用本应用。
-                    PC端点击地址栏右侧的“+”图标可将本应用添加到桌面上，
-                    移动端可通过浏览器菜单将本应用添加至桌面上。
-                </p>
-                {{  libraries | json}}
-            </div>
+        <div class="content">
+            <app-show-libraries></app-show-libraries>
         </div>
     </mat-tab>
-
     <mat-tab label="我">
         <app-edit-user-info></app-edit-user-info>
     </mat-tab>
 </mat-tab-group>
-  

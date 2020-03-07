@@ -16,16 +16,20 @@
     <br>
 
     <mat-form-field class="example-full-width">
-        <mat-label>题库名（返回主页后保存）</mat-label>
+        <mat-label>题库名</mat-label>
         <input matInput placeholder="" [(ngModel)]="library.name">
+        <button mat-button matSuffix mat-icon-button aria-label="Save"
+            matTooltip="保存题库名" (click)="renameLibrary()">
+            <mat-icon>create</mat-icon>
+        </button>
     </mat-form-field>
     
     <mat-card style="margin-bottom: 15px;">
-        <p>创建者：{{ library.creater }}</p>
-        <p>题目数量：{{ questions.length }}</p>
+        <p>创建者：{{ library ? library.creater : "Loading..." }}</p>
+        <p>题目数量：{{ questions ? questions.length : "Loading..." }}</p>
     </mat-card>
     
-    <mat-accordion>
+    <mat-accordion *ngIf="hasLoaded">
         <mat-expansion-panel
             *ngFor="let question of questions"
             [id]="question.id" (opened)="scrollIntoView(question.id.toString(), true, 200)">

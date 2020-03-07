@@ -7,6 +7,7 @@ import { ToastService, ToastBackgroundColor } from 'src/app/services/toast.servi
 import { Library, Question, QuestionType } from 'src/app/Library/question-service';
 import { DialogService, DialogData } from 'src/app/services/dialog.service';
 import { ToolbarService } from 'src/app/services/toolbar.service';
+import { ProgressBarService, ProgressBarMode } from 'src/app/services/progress-bar.service';
 
 @Component({
   selector: 'app-edit-library',
@@ -20,23 +21,24 @@ export class EditLibraryComponent {
   public hasLoaded: boolean = false;
   public newQuestionViewModel: Question;
 
-  @ViewChild("exportElement", { static: true })
-  private exportElement: ElementRef;
+  @ViewChild("exportElement", { static: false })
+  public exportElement: ElementRef;
 
   constructor(
     private route: ActivatedRoute,
     private toastService: ToastService,
     private dialogService: DialogService,
     private toolbarService: ToolbarService,
+    private progressbarService: ProgressBarService,
     private questionsService: QuestionsLocalforageService){
       
-      let id = this.route.snapshot.paramMap.get('id');
-      this.questionsService.getLibrary(id).then(lib => {
-        this.library = lib;
-        this.toolbarService.message = this.library.name;
-        this.updateQuestions();
-        this.resetViewModel();
-      });
+    let id = this.route.snapshot.paramMap.get('id');
+    this.questionsService.getLibrary(id).then(lib => {
+      this.library = lib;
+      this.toolbarService.message = this.library.name;
+      this.updateQuestions();
+      this.resetViewModel();
+    });
   }
 
   private resetViewModel() {
@@ -44,9 +46,18 @@ export class EditLibraryComponent {
       id: -1,
       title: "",
       type: QuestionType.MultipleChoice,
-      options: [],
+      options: [
+        { text:"", isRight: false },
+        { text:"", isRight: false },
+        { text:"", isRight: false },
+        { text:"", isRight: true }
+      ],
       answerText: ""
     };
+  }
+
+  ngDoCheck(): void {
+    this.progressbarService.setMode(this.hasLoaded ? ProgressBarMode.determinate : ProgressBarMode.indeterminate);
   }
 
   public toTypeName(typeValue: QuestionType) {
@@ -59,10 +70,6 @@ export class EditLibraryComponent {
     .find( type => type.value == typeValue ).name;
   }
 
-  ngOnDestroy() {
-    this.questionsService.setLibraryName(this.library.id, this.library.name);
-  }
-
   updateQuestions() {
     this.questionsService.getAllQuestions(this.library.id).then(questions => {
       this.questions = questions;
@@ -70,6 +77,11 @@ export class EditLibraryComponent {
     });
   }
 
+  renameLibrary() {
+    this.questionsService.setLibraryName(this.library.id, this.library.name);
+    this.toastService.show("已保存", ToastBackgroundColor.success);
+  }
+  
   saveQuestion(id: number) {
     let question = this.questions.find(q => q.id == id);
 
@@ -81,13 +93,13 @@ export class EditLibraryComponent {
     this.toastService.show("已保存", ToastBackgroundColor.success);
   }
 
-  removeQuestion(id: number) {
+  async removeQuestion(id: number) {
     let data: DialogData = { 
       title: "Are you sure?",
       content:`确认要删除该题吗？`
     };
-    this.dialogService.openDialog(data, input => {
-      if(input) {
+    await this.dialogService.openDialog(data, input => {
+      if (input) {
         this.questionsService.removeQuestion(this.library.id, id);
         this.questions.splice(this.questions.findIndex( q => q.id == id), 1);
         this.toastService.show("已删除", ToastBackgroundColor.success);
@@ -96,14 +108,13 @@ export class EditLibraryComponent {
   }
 
   async addQuestion() {
-    if(!this.questionCheck(this.newQuestionViewModel)) {
+    if (!this.questionCheck(this.newQuestionViewModel)) {
       return;
     }
-    this.questionsService.addQuestion(this.library.id, this.newQuestionViewModel, () => {
-      this.toastService.show("添加完成", ToastBackgroundColor.success);
-      this.questions.push(this.newQuestionViewModel);
-      this.resetViewModel();
-    });
+    await this.questionsService.addQuestion(this.library.id, this.newQuestionViewModel);
+    this.toastService.show("添加完成", ToastBackgroundColor.success);
+    this.questions.push(this.newQuestionViewModel);
+    this.resetViewModel();
   }
 
   questionCheck(question: Question): boolean {
@@ -135,8 +146,9 @@ export class EditLibraryComponent {
   }
 
   export() {
+    console.log(this.exportElement);
     let element = this.exportElement.nativeElement;
-    this.questionsService.export(this.library).then(result => {
+    this.questionsService.export(this.library.id).then(result => {
       element.setAttribute('href',
         'data:text/plain;charset=utf-8,' + result);
       element.setAttribute('download', `${this.library.name}_${this.library.creater}.json`);

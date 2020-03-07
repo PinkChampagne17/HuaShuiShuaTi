@@ -22,8 +22,6 @@ export class MultipleChoiceComponent {
   public options: Array<QuestionOption>;
   @Input()
   public isTrueOrFalse: boolean;
-  @Input()
-  public questionsContentElement: ElementRef;
 
   public optionsViewModel: Array<OptionsViewModel> = [];
   public hoveringOptionId: number = -1;
@@ -59,7 +57,7 @@ export class MultipleChoiceComponent {
     this.detail.isAnswered = true;
 
     setTimeout(() => {
-      this.questionsContentElement.nativeElement.scrollIntoView(false);
+      document.getElementById("questionsContent").scrollIntoView(false);
     }, 500);
   }
 

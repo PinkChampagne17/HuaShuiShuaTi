@@ -67,6 +67,7 @@ import { EditUserInfoComponent } from './components/edit-user-info/edit-user-inf
 import { DialogComponent } from './components/dialog/dialog.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { ShowLibrariesComponent } from './components/home/show-libraries/show-libraries.component';
 
 const MATERIAL_MODULES = [
   A11yModule,
@@ -132,6 +133,7 @@ const MATERIAL_MODULES = [
     EditFillInTheBlankComponent,
     EditUserInfoComponent,
     DialogComponent,
+    ShowLibrariesComponent,
   ],
   imports: [
     BrowserModule,

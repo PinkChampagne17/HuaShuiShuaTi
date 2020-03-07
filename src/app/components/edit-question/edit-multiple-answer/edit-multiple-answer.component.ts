@@ -31,7 +31,7 @@ export class EditMultipleAnswerComponent {
   
   ngOnInit(): void {
     if(this.questionViewModel.options.length == 0) {
-      this.number = 2;
+      this.number = 4;
     }
     else {
       this._number = this.questionViewModel.options.length;
