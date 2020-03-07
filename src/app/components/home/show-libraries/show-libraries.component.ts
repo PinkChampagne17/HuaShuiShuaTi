@@ -6,7 +6,7 @@ import { QuestionsLocalforageService } from 'src/app/services/questions-localfor
 import { ToastService, ToastBackgroundColor } from 'src/app/services/toast.service';
 import { DialogService, DialogData } from 'src/app/services/dialog.service';
 import { ToolbarService } from 'src/app/services/toolbar.service';
-import { Library } from 'src/app/Library/question-service';
+import { Library } from 'src/app/lib/question-service';
 
 interface AboutJson {
   version: string;
@@ -18,7 +18,9 @@ interface AboutJson {
   templateUrl: './show-libraries.component.html',
   styleUrls: ['./show-libraries.component.scss']
 })
-export class ShowLibrariesComponent {
+export class ShowLibrariesComponent
+
+{
 
   public libraries: Array<Library>;
   

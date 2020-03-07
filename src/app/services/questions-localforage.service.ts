@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { IQuestionsService, Library, Question } from '../Library/question-service';
+import { IQuestionsService, Library, Question } from '../lib/question-service';
 
 import * as localforage from 'src/assets/js/localforage.min.js';
 

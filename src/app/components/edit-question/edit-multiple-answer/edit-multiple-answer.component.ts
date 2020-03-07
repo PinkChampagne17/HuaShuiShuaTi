@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { Question } from 'src/app/Library/question-service';
+import { Question } from 'src/app/lib/question-service';
 
 @Component({
   selector: 'app-edit-multiple-answer',

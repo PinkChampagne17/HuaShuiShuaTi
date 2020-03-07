@@ -4,7 +4,7 @@ import { ActivatedRoute } from '@angular/router';
 import { QuestionsLocalStorageService } from 'src/app/services/questions-local-storage.service';
 import { QuestionsLocalforageService } from 'src/app/services/questions-localforage.service';
 import { ToastService, ToastBackgroundColor } from 'src/app/services/toast.service';
-import { Library, Question, QuestionType } from 'src/app/Library/question-service';
+import { Library, Question, QuestionType } from 'src/app/lib/question-service';
 import { DialogService, DialogData } from 'src/app/services/dialog.service';
 import { ToolbarService } from 'src/app/services/toolbar.service';
 import { ProgressBarService, ProgressBarMode } from 'src/app/services/progress-bar.service';

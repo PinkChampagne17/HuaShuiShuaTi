@@ -1,8 +1,8 @@
 import { Component, Input, ElementRef } from '@angular/core';
 
-import { QuestionOption } from 'src/app/Library/question-service';
+import { QuestionOption } from 'src/app/lib/question-service';
 import { AnswerDetail } from '../questions.component';
-import { FisherYates } from 'src/app/Library/fisher-yates';
+import { FisherYates } from 'src/app/lib/fisher-yates';
 
 interface OptionsViewModel {
   id: number;

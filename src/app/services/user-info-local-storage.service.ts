@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { IUserInfoService, UserInfo } from '../Library/user-info-service';
+import { IUserInfoService, UserInfo } from '../lib/user-info-service';
 import { ToastService, ToastBackgroundColor } from './toast.service';
 
 @Injectable({

@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 
-import { QuestionType, Question} from 'src/app/Library/question-service';
+import { QuestionType, Question} from 'src/app/lib/question-service';
 
 interface typeOptionViewModel{
   name: string;

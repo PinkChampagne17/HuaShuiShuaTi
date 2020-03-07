@@ -1,8 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 
-import { IQuestionsService, QuestionOption } from 'src/app/Library/question-service';
+import { IQuestionsService, QuestionOption } from 'src/app/lib/question-service';
 import { AnswerDetail } from '../questions.component';
-import { FisherYates } from 'src/app/Library/fisher-yates';
+import { FisherYates } from 'src/app/lib/fisher-yates';
 
 @Component({
   selector: 'app-multiple-answers',

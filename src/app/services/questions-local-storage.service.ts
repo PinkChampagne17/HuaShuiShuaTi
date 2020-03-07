@@ -1,19 +1,19 @@
 import { Injectable } from '@angular/core';
 
-import { QuestionOption, IQuestionsService, QuestionType, Library, Question } from '../Library/question-service';
+// import { QuestionOption, IQuestionsService, QuestionType, Library, Question } from '../lib/question-service';
 
-interface LsQuestionLibraryData {
-  libraryInfo: Library;
-  questions: string;
-}
+// interface LsQuestionLibraryData {
+//   libraryInfo: Library;
+//   questions: string;
+// }
 
-class LsQuestions{
-  id: Array<number> = [-1];
-  type: Array<QuestionType> = [];
-  title: Array<string> = [];
-  options: Array<Array<QuestionOption>> = [];
-  answerText: Array<string> = [];
-}
+// class LsQuestions{
+//   id: Array<number> = [-1];
+//   type: Array<QuestionType> = [];
+//   title: Array<string> = [];
+//   options: Array<Array<QuestionOption>> = [];
+//   answerText: Array<string> = [];
+// }
 
 @Injectable({
   providedIn: 'root'
