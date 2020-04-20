@@ -1,6 +1,6 @@
-# HuaShuiShuaTi.App
+# HuaShuiShuaTi
 
-划水刷题是一款Material Design风格的刷题web应用，使用Angular 8开发而成。
+划水刷题是一款Material Design风格的刷题web应用，使用Angular8开发而成（体验版为Angular9）。
 
 只建议你使用该应用，不建议通过本应用学习代码（意味深）。
 
@@ -11,7 +11,8 @@
 
 | Description | URL |
 | :-: |:-:|
-| Online Web-version | https://pinkchampagne17.github.io/huashuishuati/ 
+| 正式版 | https://pinkchampagne17.github.io/huashuishuati/ 
+| 体验版 | https://huashuishuati.github.io// 
 
 ## 如何在本地开发并运行？
 
@@ -37,5 +38,5 @@ ng serve --open
 
 ## 使用的第三方库
 - [Angular Material](https://github.com/angular/components)
-- [NG Bootstrap](https://github.com/ng-bootstrap/ng-bootstrap)
+- [NG Bootstrap](https://github.com/ng-bootstrap/ng-bootstrap) (新版已移除)
 - [localForage](https://github.com/localForage/localForage)
