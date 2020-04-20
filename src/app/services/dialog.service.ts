@@ -9,7 +9,6 @@ export interface DialogData {
   providedIn: 'root'
 })
 export class DialogService {
-
   openDialog(data: DialogData, callbackfn: (boolean) => void = (b) => {}): void {
     var result = window.confirm(data.content);
     callbackfn(result);

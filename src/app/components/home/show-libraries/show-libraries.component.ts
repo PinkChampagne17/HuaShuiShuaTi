@@ -30,7 +30,7 @@ export class ShowLibrariesComponent {
     year: new Date().getFullYear(),
   };
 
-  @ViewChild("fileInput", { static: false })
+  @ViewChild("fileInput")
   private fileInputElement: ElementRef;
 
   constructor(

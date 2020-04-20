@@ -20,7 +20,7 @@ export class EditLibraryComponent {
   public hasLoaded: boolean = false;
   public newQuestionViewModel: Question;
 
-  @ViewChild("exportElement", { static: false })
+  @ViewChild("exportElement")
   public exportElement: ElementRef;
 
   constructor(
