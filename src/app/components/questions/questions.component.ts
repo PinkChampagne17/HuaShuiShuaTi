@@ -1,7 +1,7 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { Question } from 'src/app/lib/question-service';
+import { Question } from 'src/app/models/question';
 import { ProgressBarService } from 'src/app/services/progress-bar.service';
 import { QuestionsLocalforageService } from 'src/app/services/questions-localforage.service';
 import { FisherYates } from 'src/app/lib/fisher-yates';

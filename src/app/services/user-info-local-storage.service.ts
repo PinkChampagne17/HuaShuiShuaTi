@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import { IUserInfoService, UserInfo } from '../lib/user-info-service';
+
 import { ToastService } from './toast.service';
+import { UserInfo } from '../models/user-info';
 
 @Injectable({
   providedIn: 'root'
 })
-export class UserInfoLocalStorageService implements IUserInfoService {
+export class UserInfoLocalStorageService {
 
   public isAvailable: boolean;
   

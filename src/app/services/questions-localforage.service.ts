@@ -1,7 +1,8 @@
 import { Injectable } from '@angular/core';
-import { IQuestionsService, Library, Question } from '../lib/question-service';
+import { Question } from '../models/question';
 
 import * as localforage from 'src/assets/js/localforage.min.js';
+import { Library } from '../models/library';
 
 interface LfLibrary {
   id: string;
@@ -18,7 +19,7 @@ interface LfLibraryAndQuestions {
 @Injectable({
   providedIn: 'root'
 })
-export class QuestionsLocalforageService implements IQuestionsService {
+export class QuestionsLocalforageService {
 
   private librariesInfoRepository: any;
 

@@ -3,10 +3,12 @@ import { ActivatedRoute } from '@angular/router';
 
 import { QuestionsLocalforageService } from 'src/app/services/questions-localforage.service';
 import { ToastService } from 'src/app/services/toast.service';
-import { Library, Question, QuestionType } from 'src/app/lib/question-service';
+import { Question } from 'src/app/models/question';
 import { DialogService, DialogData } from 'src/app/services/dialog.service';
 import { ToolbarService } from 'src/app/services/toolbar.service';
 import { ProgressBarService, ProgressBarMode } from 'src/app/services/progress-bar.service';
+import { Library } from 'src/app/models/library';
+import { QuestionType } from 'src/app/models/question-type';
 
 @Component({
   selector: 'app-edit-library',

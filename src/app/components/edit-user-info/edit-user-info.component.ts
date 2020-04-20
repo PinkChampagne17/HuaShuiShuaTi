@@ -6,7 +6,7 @@ import { Observable } from 'rxjs';
 import { UserInfoLocalStorageService } from 'src/app/services/user-info-local-storage.service';
 import { ToastService } from 'src/app/services/toast.service';
 import { ToolbarService } from 'src/app/services/toolbar.service';
-import { UserInfo } from 'src/app/lib/user-info-service';
+import { UserInfo } from 'src/app/models/user-info';
 
 export interface User {
   name: string;

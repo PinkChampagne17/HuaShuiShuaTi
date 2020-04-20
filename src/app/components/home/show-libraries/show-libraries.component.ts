@@ -6,7 +6,7 @@ import { QuestionsLocalforageService } from 'src/app/services/questions-localfor
 import { ToastService } from 'src/app/services/toast.service';
 import { DialogService, DialogData } from 'src/app/services/dialog.service';
 import { ToolbarService } from 'src/app/services/toolbar.service';
-import { Library } from 'src/app/lib/question-service';
+import { Library } from 'src/app/models/library';
 
 interface AboutJson {
   version: string;
