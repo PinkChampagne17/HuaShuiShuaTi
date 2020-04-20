@@ -53,9 +53,7 @@ import { MultipleChoiceComponent } from './components/questions/multiple-choice/
 import { ProgressBarComponent } from './components/progress-bar/progress-bar.component';
 import { QuestionsComponent } from './components/questions/questions.component';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
-import { ToastsContainer } from './components/toasts-container.component';
 import { HomeComponent } from './components/home/home.component';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AppComponent } from './app.component';
 import { EditLibraryComponent } from './components/edit-library/edit-library.component';
 import { EditQuestionComponent } from './components/edit-question/edit-question.component';
@@ -118,7 +116,6 @@ const MATERIAL_MODULES = [
   declarations: [
     AppComponent,
     HomeComponent,
-    ToastsContainer,
     ProgressBarComponent,
     QuestionsComponent,
     ToolbarComponent,
@@ -141,7 +138,6 @@ const MATERIAL_MODULES = [
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
-    NgbModule,
     MATERIAL_MODULES,
     HttpClientModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })

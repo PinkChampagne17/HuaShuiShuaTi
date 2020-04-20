@@ -18,9 +18,7 @@ interface AboutJson {
   templateUrl: './show-libraries.component.html',
   styleUrls: ['./show-libraries.component.scss']
 })
-export class ShowLibrariesComponent
-
-{
+export class ShowLibrariesComponent {
 
   public libraries: Array<Library>;
   

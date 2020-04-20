@@ -23,8 +23,6 @@
     "@angular/pwa": "^0.900.3",
     "@angular/router": "~8.2.14",
     "@angular/service-worker": "~8.2.14",
-    "@ng-bootstrap/ng-bootstrap": "^5.2.1",
-    "bootstrap": "^4.4.1",
     "hammerjs": "^2.0.8",
     "rxjs": "~6.4.0",
     "tslib": "^1.10.0",
