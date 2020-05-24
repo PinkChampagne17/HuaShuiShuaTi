@@ -4,9 +4,9 @@ import { Component } from '@angular/core';
 import { Observable } from 'rxjs';
 
 import { UserInfoLocalStorageService } from 'src/app/services/user-info-local-storage.service';
-import { ToastService, ToastBackgroundColor } from 'src/app/services/toast.service';
+import { ToastService } from 'src/app/services/toast.service';
 import { ToolbarService } from 'src/app/services/toolbar.service';
-import { UserInfo } from 'src/app/lib/user-info-service';
+import { UserInfo } from 'src/app/models/user-info';
 
 export interface User {
   name: string;
@@ -55,7 +55,7 @@ export class EditUserInfoComponent {
         this.saveUserInfo({ name: userInfo.name, date: this.date });
       }
       else {
-        this.toastService.show("不接受空名字", ToastBackgroundColor.danger, 5000);
+        this.toastService.show("不接受空名字");
       }
     }
   }
@@ -65,11 +65,11 @@ export class EditUserInfoComponent {
       let option = this.options.find(opiton => opiton.name == name);
       let message =  option == null ? "保存成功" : option.stinger;
 
-      this.toastService.show(message, ToastBackgroundColor.success);
+      this.toastService.show(message);
       this.toolbarService.greet();
     }
     else {
-      this.toastService.show("保存失败", ToastBackgroundColor.danger, 5000);
+      this.toastService.show("保存失败");
     }
   }
   

@@ -1,13 +1,14 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { QuestionsLocalStorageService } from 'src/app/services/questions-local-storage.service';
 import { QuestionsLocalforageService } from 'src/app/services/questions-localforage.service';
-import { ToastService, ToastBackgroundColor } from 'src/app/services/toast.service';
-import { Library, Question, QuestionType } from 'src/app/lib/question-service';
+import { ToastService } from 'src/app/services/toast.service';
+import { Question } from 'src/app/models/question';
 import { DialogService, DialogData } from 'src/app/services/dialog.service';
 import { ToolbarService } from 'src/app/services/toolbar.service';
 import { ProgressBarService, ProgressBarMode } from 'src/app/services/progress-bar.service';
+import { Library } from 'src/app/models/library';
+import { QuestionType } from 'src/app/models/question-type';
 
 @Component({
   selector: 'app-edit-library',
@@ -21,7 +22,7 @@ export class EditLibraryComponent {
   public hasLoaded: boolean = false;
   public newQuestionViewModel: Question;
 
-  @ViewChild("exportElement", { static: false })
+  @ViewChild("exportElement")
   public exportElement: ElementRef;
 
   constructor(
@@ -79,7 +80,7 @@ export class EditLibraryComponent {
 
   renameLibrary() {
     this.questionsService.setLibraryName(this.library.id, this.library.name);
-    this.toastService.show("已保存", ToastBackgroundColor.success);
+    this.toastService.show("已保存");
   }
   
   saveQuestion(id: number) {
@@ -90,7 +91,7 @@ export class EditLibraryComponent {
     }
 
     this.questionsService.setQuestion(this.library.id, question);
-    this.toastService.show("已保存", ToastBackgroundColor.success);
+    this.toastService.show("已保存");
   }
 
   async removeQuestion(id: number) {
@@ -102,7 +103,7 @@ export class EditLibraryComponent {
       if (input) {
         this.questionsService.removeQuestion(this.library.id, id);
         this.questions.splice(this.questions.findIndex( q => q.id == id), 1);
-        this.toastService.show("已删除", ToastBackgroundColor.success);
+        this.toastService.show("已删除");
       }
     });
   }
@@ -112,24 +113,24 @@ export class EditLibraryComponent {
       return;
     }
     await this.questionsService.addQuestion(this.library.id, this.newQuestionViewModel);
-    this.toastService.show("添加完成", ToastBackgroundColor.success);
+    this.toastService.show("添加完成");
     this.questions.push(this.newQuestionViewModel);
     this.resetViewModel();
   }
 
   questionCheck(question: Question): boolean {
     if(question.title.trim() == "") {
-      this.toastService.show("题目不能为空", ToastBackgroundColor.danger, 5000);
+      this.toastService.show("题目不能为空");
       return false;
     }
     else if(question.type == QuestionType.FillInTheBlank && question.answerText.trim() == "") {
-      this.toastService.show("答案文本不能为空", ToastBackgroundColor.danger, 5000);
+      this.toastService.show("答案文本不能为空");
       return false;
     }
     
     for (let i = 0; i < question.options.length; i++) {
       if(question.options[i].text.trim() == "") {
-        this.toastService.show("选项文本不能为空", ToastBackgroundColor.danger, 5000);
+        this.toastService.show("选项文本不能为空");
         return false;
       }
     }
@@ -154,7 +155,7 @@ export class EditLibraryComponent {
       element.setAttribute('download', `${this.library.name}_${this.library.creater}.json`);
       element.click();
     });
-    this.toastService.show("题库文件已添加至下载列表中", ToastBackgroundColor.success, 5000);
+    this.toastService.show("题库文件已添加至下载列表中");
   }
 
   scrollIntoView(elementId: string, isTopAlign = true, timeout = 0) {

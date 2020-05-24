@@ -1,11 +1,12 @@
 import { Injectable } from '@angular/core';
-import { IUserInfoService, UserInfo } from '../lib/user-info-service';
-import { ToastService, ToastBackgroundColor } from './toast.service';
+
+import { ToastService } from './toast.service';
+import { UserInfo } from '../models/user-info';
 
 @Injectable({
   providedIn: 'root'
 })
-export class UserInfoLocalStorageService implements IUserInfoService {
+export class UserInfoLocalStorageService {
 
   public isAvailable: boolean;
   
@@ -13,13 +14,13 @@ export class UserInfoLocalStorageService implements IUserInfoService {
 
   constructor(private toastService: ToastService) { 
     this.isAvailable = localStorage != undefined;
-    if(!this.isAvailable){
-      this.toastService.show("该浏览器不支持LocalStorage，本应用将无法进行存储操作。", ToastBackgroundColor.danger, 10000);
+    if (!this.isAvailable) {
+      this.toastService.show("该浏览器不支持LocalStorage，本应用将无法进行存储操作。");
     }
   }
 
   public setUserInfo(value: UserInfo): boolean {
-    if(!this.isAvailable){
+    if (!this.isAvailable) {
       return false;
     }
     

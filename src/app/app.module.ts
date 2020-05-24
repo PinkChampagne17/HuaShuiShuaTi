@@ -53,9 +53,7 @@ import { MultipleChoiceComponent } from './components/questions/multiple-choice/
 import { ProgressBarComponent } from './components/progress-bar/progress-bar.component';
 import { QuestionsComponent } from './components/questions/questions.component';
 import { ToolbarComponent } from './components/toolbar/toolbar.component';
-import { ToastsContainer } from './components/toasts-container.component';
 import { HomeComponent } from './components/home/home.component';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { AppComponent } from './app.component';
 import { EditLibraryComponent } from './components/edit-library/edit-library.component';
 import { EditQuestionComponent } from './components/edit-question/edit-question.component';
@@ -64,7 +62,6 @@ import { EditMultipleAnswerComponent } from './components/edit-question/edit-mul
 import { EditTrueOrFalseComponent } from './components/edit-question/edit-true-or-false/edit-true-or-false.component';
 import { EditFillInTheBlankComponent } from './components/edit-question/edit-fill-in-the-blank/edit-fill-in-the-blank.component';
 import { EditUserInfoComponent } from './components/edit-user-info/edit-user-info.component';
-import { DialogComponent } from './components/dialog/dialog.component';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { ShowLibrariesComponent } from './components/home/show-libraries/show-libraries.component';
@@ -118,7 +115,6 @@ const MATERIAL_MODULES = [
   declarations: [
     AppComponent,
     HomeComponent,
-    ToastsContainer,
     ProgressBarComponent,
     QuestionsComponent,
     ToolbarComponent,
@@ -132,7 +128,6 @@ const MATERIAL_MODULES = [
     EditTrueOrFalseComponent,
     EditFillInTheBlankComponent,
     EditUserInfoComponent,
-    DialogComponent,
     ShowLibrariesComponent,
   ],
   imports: [
@@ -141,7 +136,6 @@ const MATERIAL_MODULES = [
     BrowserAnimationsModule,
     FormsModule,
     ReactiveFormsModule,
-    NgbModule,
     MATERIAL_MODULES,
     HttpClientModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
@@ -150,6 +144,6 @@ const MATERIAL_MODULES = [
   ],
   providers: [],
   bootstrap: [AppComponent],
-  entryComponents: [DialogComponent]
+  entryComponents: []
 })
 export class AppModule { }
