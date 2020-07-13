@@ -90,9 +90,15 @@ export class QuestionsLocalforageService {
   public async addQuestion(libraryId: string, question: Question): Promise<void> {
     let repository = this.getQuestionsRepository(libraryId);
 
-    let keys = await repository.keys();
+    let keys: Array<string> = await repository.keys();
 
-    question.id = keys.length == 0 ? 0 : Number.parseInt(keys.pop()) + 1;
+    if(keys.length == 0) {
+      question.id = 0;
+    }
+    else {
+      let nums = keys.map(v => parseInt(v));
+      question.id = Math.max(...nums) + 1;
+    }
     
     return repository.setItem(question.id, question);
   }

@@ -72,8 +72,8 @@ export class EditLibraryComponent {
   }
 
   updateQuestions() {
-    this.questionsService.getAllQuestions(this.library.id).then(questions => {
-      this.questions = questions;
+    this.questionsService.getAllQuestions(this.library.id).then((questions: Array<Question>) => {
+      this.questions = questions.sort((a,b) => a.id - b.id);
       this.hasLoaded = true;
     });
   }
