@@ -13,7 +13,7 @@
 
 | Description | URL |
 | :-: |:-:|
-| 正式版 | https://huashuishuati.github.io/
+| 正式版 | https://pinkchampagne17.github.io/HuaShuiShuaTi/
 
 ## 如何在本地开发并运行？
 
